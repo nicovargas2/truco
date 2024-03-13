@@ -4,4 +4,6 @@ class Logica {
         this.ronda2 = new Ronda()
         this.ronda3 = new Ronda()
     }
+
+    
 }

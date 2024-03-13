@@ -10,9 +10,9 @@ class Jugador {
     }
 
     nuevaRonda(c1, c2, c3) {
-        this.carta1 = new Carta(c1.id, c1.valorNumero, c1.palo, c1.jerarquia)
-        this.carta2 = new Carta(c2.id, c2.valorNumero, c2.palo, c2.jerarquia)
-        this.carta3 = new Carta(c3.id, c3.valorNumero, c3.palo, c3.jerarquia)
+        this.carta1 = new Carta(c1.id, c1.valorNumero, c1.palo, c1.jerarquia, c1.locacion)
+        this.carta2 = new Carta(c2.id, c2.valorNumero, c2.palo, c2.jerarquia, c2.locacion)
+        this.carta3 = new Carta(c3.id, c3.valorNumero, c3.palo, c3.jerarquia, c3.locacion)
         this.cartasMano = [this.carta1, this.carta2, this.carta3]
     }
 

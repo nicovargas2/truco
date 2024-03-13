@@ -9,10 +9,63 @@
 </head>
 
 <body>
-
-    <div id="content">
-
+    <div id="info-jugador" class="text-center">
+        <input type="text" name="nombre-jugador" id="nombre-jugador" placeholder="ingrese su nombre"
+            class="border-1 text-gray-900 placeholder:text-gray-400">
+        <br>
+        <button type="submit" id="jugar"
+            class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Jugar!</button>
     </div>
+    <div id="principalJuego">
+        <div id="info-bot">
+            <table style="border: 1px solid;">
+                <thead style="border: 1px solid;">
+                    <th colspan="3"><span id="spanNombreBot"></span></th>
+                </thead>
+                <tbody style="border: 1px solid;">
+                    <tr>
+                        <td style="border: 1px solid;" id="botCarta1"></td>
+                        <td style="border: 1px solid;" id="botCarta2"></td>
+                        <td style="border: 1px solid;" id="botCarta3"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="mesa" style="height: 200px; width: 200px; border: 1px solid; background-color: green;">
+            <table style="border: 1px solid;">
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="cartaJugadaBot1"></td>
+                        <td id="cartaJugadaBot2"></td>
+                        <td id="cartaJugadaBot3"></td>
+                    </tr>
+                    <tr>
+                        <td id="cartaJugadaJugadorRival1"></td>
+                        <td id="cartaJugadaJugadorRival2"></td>
+                        <td id="cartaJugadaJugadorRival3"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div id="jugadorRivalCartas">
+            <table style="border: 1px solid;">
+                <thead style="border: 1px solid;">
+                    <th colspan="3"><span id="spanNombreJugadorRival"></span></th>
+                </thead>
+                <tbody style="border: 1px solid;">
+                    <tr>
+                        <td style="border: 1px solid;" id="jugadorRivalCarta1"></td>
+                        <td style="border: 1px solid;" id="jugadorRivalCarta2"></td>
+                        <td style="border: 1px solid;" id="jugadorRivalCarta3"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <script src="./js/Ronda.js"></script>
     <script src="./js/Jugador.js"></script>
     <script src="./js/Carta.js"></script>
