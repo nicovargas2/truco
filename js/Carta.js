@@ -1,12 +1,17 @@
 class Carta {
-    constructor(id, valorNumero, palo, jerarquia) {
+    constructor(id, valorNumero, palo, jerarquia, locacion) {
         this.id = id
         this.valorNumero = valorNumero
         this.palo = palo
         this.jerarquia = jerarquia
+        this.locacion = locacion
     }
 
     mostrar() {
-        return this.valorNumero + '-' + this.palo
+        return this.valorNumero + '-' + this.palo + '-' + 'locacion: ' + this.locacion
+    }
+
+    mostrarLocacion() {
+        return this.locacion
     }
 }
