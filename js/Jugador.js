@@ -40,4 +40,81 @@ class Jugador {
         return this.cartasMano.pop()
     }
 
+    envido() {
+        return 'envido'
+    }
+    realEnvido() {
+        return 'real envido'
+    }
+
+    truco() {
+        return 'truco'
+    }
+
+    irseAlMazo() {
+        this.cartasMano = []
+    }
+
+    quiero() {
+        return true
+    }
+
+    noQuiero() {
+        return false
+    }
+
+    cantarTantos() {
+        const puntosBase = 20
+        let opcion1 = 0
+        let opcion2 = 0
+        let opcion3 = 0
+
+        if (this.carta1.palo == this.carta2.palo) {
+            opcion1 = puntosBase + this.carta1.valorNumero + this.carta2.valorNumero
+            if (opcion1 > 33) {
+                if (this.carta1.valorNumero >= 10 & this.carta1.valorNumero <= 12) {
+                    opcion1 = opcion1 - this.carta1.valorNumero
+                }
+                if (this.carta2.valorNumero >= 10 & this.carta2.valorNumero <= 12) {
+                    opcion1 = opcion1 - this.carta2.valorNumero
+                }
+            }
+        }
+
+        if (this.carta1.palo == this.carta3.palo) {
+            opcion2 = puntosBase + this.carta1.valorNumero + this.carta3.valorNumero
+            if (opcion2 > 33) {
+                if (this.carta1.valorNumero >= 10 & this.carta1.valorNumero <= 12) {
+                    opcion2 = opcion2 - this.carta1.valorNumero
+                }
+                if (this.carta3.valorNumero >= 10 & this.carta3.valorNumero <= 12) {
+                    opcion2 = opcion2 - this.carta3.valorNumero
+                }
+            }
+        }
+
+        if (this.carta3.palo == this.carta2.palo) {
+            opcion3 = puntosBase + this.carta3.valorNumero + this.carta2.valorNumero
+            if (opcion3 > 33) {
+                if (this.carta3.valorNumero >= 10 & this.carta3.valorNumero <= 12) {
+                    opcion3 = opcion3 - this.carta3.valorNumero
+                }
+                if (this.carta2.valorNumero >= 10 & this.carta2.valorNumero <= 12) {
+                    opcion3 = opcion3 - this.carta2.valorNumero
+                }
+            }
+        }
+
+        return Math.max(opcion1, opcion2, opcion3)
+    }
+
+    cantarFlor() {
+        if (this.carta1.palo == this.carta2.palo & this.carta1.palo == this.carta3.palo) {
+            return "Flor"
+        }
+        else {
+            return "Las cartas no son todas del mismo palo"
+        }
+    }
+
 }

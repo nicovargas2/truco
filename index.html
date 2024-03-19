@@ -4,66 +4,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <title>Truco</title>
 </head>
 
 <body>
-    <div id="info-jugador" class="text-center">
-        <input type="text" name="nombre-jugador" id="nombre-jugador" placeholder="ingrese su nombre"
-            class="border-1 text-gray-900 placeholder:text-gray-400">
-        <br>
-        <button type="submit" id="jugar"
-            class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Jugar!</button>
-    </div>
-    <div id="principalJuego">
-        <div id="info-bot">
-            <table style="border: 1px solid;">
-                <thead style="border: 1px solid;">
-                    <th colspan="3"><span id="spanNombreBot"></span></th>
-                </thead>
-                <tbody style="border: 1px solid;">
-                    <tr>
-                        <td style="border: 1px solid;" id="botCarta1"></td>
-                        <td style="border: 1px solid;" id="botCarta2"></td>
-                        <td style="border: 1px solid;" id="botCarta3"></td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="flex flex-row items-center">
+        <!-- Datos jugador -->
+        <div class="text-center">
+            <div id="info-jugador">
+                <input type="text" id="nombre-jugador" placeholder="ingrese su nombre"
+                    class="text-gray-900 placeholder:text-gray-400">
+                <br>
+                <button type="submit" id="jugar"
+                    class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Jugar!</button>
+            </div>
         </div>
-        <div id="mesa" style="height: 200px; width: 200px; border: 1px solid; background-color: green;">
-            <table style="border: 1px solid;">
-                <thead>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td id="cartaJugadaBot1"></td>
-                        <td id="cartaJugadaBot2"></td>
-                        <td id="cartaJugadaBot3"></td>
-                    </tr>
-                    <tr>
-                        <td id="cartaJugadaJugadorRival1"></td>
-                        <td id="cartaJugadaJugadorRival2"></td>
-                        <td id="cartaJugadaJugadorRival3"></td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- Juego principal -->
+        <div id="principalJuego" class="flex text-center">
+            <div class="flex flex-row text-center" id="info-bot">
+                <!-- Bot -->
+                <table>
+                    <thead>
+                        <th colspan="3">
+                            <span id="spanNombreBot"></span>
+                        </th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div id="botCarta1"></div>
+                            </td>
+                            <td>
+                                <div id="botCarta2"></div>
+                            </td>
+                            <td>
+                                <div id="botCarta3"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Mesa -->
+            <div id="mesa" style="height: 300px; width: 300px; border: 1px solid; background-color: green;">
+                <div class="flex flex-row">
+                    <div id="cartaJugadaBot1" class="w-2 h-4"></div>
+                    <div id="cartaJugadaBot2" class="w-2 h-4"></div>
+                    <div id="cartaJugadaBot3" class="w-2 h-4"></div>
+                </div>
+                <div class="flex flex-row mt-4">
+                    <div id="cartaJugadaJugadorRival1" class="w-2 h-4"></div>
+                    <div id="cartaJugadaJugadorRival2" class="w-2 h-4"></div>
+                    <div id="cartaJugadaJugadorRival3" class="w-2 h-4"></div>
+                </div>
+            </div>
+            <!-- Jugador Rival -->
+            <div id="jugadorRivalCartas" class="text-center">
+                <table>
+                    <thead>
+                        <th colspan="3">
+                            <span id="spanNombreJugadorRival"></span>
+                        </th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div id="jugadorRivalCarta1"></div>
+                            </td>
+                            <td>
+                                <div id="jugadorRivalCarta2"></div>
+                            </td>
+                            <td>
+                                <div id="jugadorRivalCarta3"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
 
+                </div>
+            </div>
         </div>
-        <div id="jugadorRivalCartas">
-            <table style="border: 1px solid;">
-                <thead style="border: 1px solid;">
-                    <th colspan="3"><span id="spanNombreJugadorRival"></span></th>
-                </thead>
-                <tbody style="border: 1px solid;">
-                    <tr>
-                        <td style="border: 1px solid;" id="jugadorRivalCarta1"></td>
-                        <td style="border: 1px solid;" id="jugadorRivalCarta2"></td>
-                        <td style="border: 1px solid;" id="jugadorRivalCarta3"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+
     </div>
 
     <script src="./js/Ronda.js"></script>
@@ -73,6 +96,7 @@
     <script src="./js/Bot.js"></script>
     <script src="./js/Logica.js"></script>
     <script src="./js/Truco.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 
 </html>

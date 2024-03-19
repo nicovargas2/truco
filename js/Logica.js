@@ -5,5 +5,5 @@ class Logica {
         this.ronda3 = new Ronda()
     }
 
-    
+
 }
