@@ -8,10 +8,7 @@ class Carta {
     }
 
     mostrar() {
-        return this.valorNumero + '-' + this.palo + '-' + 'locacion: ' + this.locacion
+        return this.valorNumero + '-' + this.palo
     }
 
-    mostrarLocacion() {
-        return this.locacion
-    }
 }
