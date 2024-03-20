@@ -17,6 +17,7 @@ class Ronda {
     rondaTerminada() {
         this.enCurso = false
     }
+
     /*
     ganadorHost() {
         this.ganador = 'host'
