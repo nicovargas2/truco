@@ -116,6 +116,19 @@ function mostrarCartas() {
     imgJugadorRivalCarta3.alt = jugadorRival.carta3.mostrar()
     imgJugadorRivalCarta3.id = jugadorRival.cartasMano[2].id
 
+    imgJugadorRivalCarta1.addEventListener('click', () => {
+        const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
+        divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta1)
+    })
+    imgJugadorRivalCarta2.addEventListener('click', () => {
+        const divCartaJugadaJugadorRival2 = document.getElementById('cartaJugadaJugadorRival2')
+        divCartaJugadaJugadorRival2.appendChild(imgJugadorRivalCarta2)
+    })
+    imgJugadorRivalCarta3.addEventListener('click', () => {
+        const divCartaJugadaJugadorRival3 = document.getElementById('cartaJugadaJugadorRival3')
+        divCartaJugadaJugadorRival3.appendChild(imgJugadorRivalCarta3)
+    })
+
     divJugadorRivalCarta1.appendChild(imgJugadorRivalCarta1)
     divJugadorRivalCarta2.appendChild(imgJugadorRivalCarta2)
     divJugadorRivalCarta3.appendChild(imgJugadorRivalCarta3)
