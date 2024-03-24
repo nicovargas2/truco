@@ -1,0 +1,31 @@
+.flex-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-container>div {
+  background-color: #f1f1f1;
+  margin: 10px;
+  padding: 20px;
+  font-size: 30px;
+}
+
+.flex-container-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-container-row>div {
+  margin-top: 40px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 20px;
+  font-size: 30px;
+  display: flex;
+  flex-direction: row;
+}
+
+img {
+  margin: 5px;
+  padding: 5px;
+}
