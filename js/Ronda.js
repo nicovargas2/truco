@@ -18,19 +18,6 @@ class Ronda {
         this.enCurso = false
     }
 
-    /*
-    ganadorHost() {
-        this.ganador = 'host'
-    }
- 
-    ganadorRival() {
-        this.ganador = 'rival'
-    }
- 
-    empate() {
-        this.ganador = 'empate'
-    }*/
-
     puntosEnJuego(puntos) {
         this.puntosEnJuego = puntos
     }

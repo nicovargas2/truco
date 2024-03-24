@@ -1,63 +1,8 @@
-
 //Creo los jugadores
 const bot = new Bot()
 const jugadorRival = new Jugador('')
+const arbitro = new Arbitro()
 
-const divPrincipalJuego = document.getElementById('principalJuego')
-const divInfoBot = document.getElementById('info-bot')
-const divInfoJugador = document.getElementById('info-jugador')
-const divMesa = document.getElementById('mesa')
-const divJugadorRivalCartas = document.getElementById('jugadorRivalCartas')
-
-divPrincipalJuego.hidden = true
-divInfoBot.hidden = true
-divMesa.hidden = true
-divJugadorRivalCartas.hidden = true
-
-
-const buttonJugar = document.getElementById('jugar')
-
-const nombreJugador = document.querySelector("#nombre-jugador")
-nombreJugador.addEventListener('input', (e) => {
-    jugadorRival.nombre = e.target.value
-})
-
-
-const validarNombre = () => {
-    if (jugadorRival.nombre != '' && jugadorRival.nombre != null) {
-        return true
-    }
-    return false
-}
-
-buttonJugar.addEventListener('click', () => {
-    if (validarNombre()) {
-        ComenzarElJuego()
-    }
-    else {
-        Toastify({
-            text: "Ingresar un nombre de al menos 2 letras",
-            duration: 2000,
-            style: {
-                background: "linear-gradient(to right, #ed1f11, #c7308f)",
-            },
-        }).showToast();
-    }
-})
-
-function iniciarRonda() {
-    console.log('Nueva ronda')
-    mazo = new Mazo()
-    mazo.mezclar()
-    bot.nuevaRonda(mazo.repartirUnaCarta(), mazo.repartirUnaCarta(), mazo.repartirUnaCarta())
-    bot.cartasMano[0].locacion = "../Truco/img/back.jpg"
-    bot.cartasMano[1].locacion = "../Truco/img/back.jpg"
-    bot.cartasMano[2].locacion = "../Truco/img/back.jpg"
-    jugadorRival.nuevaRonda(mazo.repartirUnaCarta(), mazo.repartirUnaCarta(), mazo.repartirUnaCarta())
-    bot.mostrarDatos()
-    jugadorRival.mostrarDatos()
-    bot.cantarFlor()
-}
 
 //Armo el tablero
 function armarTablero() {
@@ -75,6 +20,9 @@ function armarTablero() {
 }
 
 function mostrarCartas() {
+    //Esto es para saber las cartas de ambos jugadores
+    console.log(bot.mostrarDatos())
+    console.log(jugadorRival.mostrarDatos())
     const divBotCarta1 = document.getElementById('botCarta1')
     const divBotCarta2 = document.getElementById('botCarta2')
     const divBotCarta3 = document.getElementById('botCarta3')
@@ -93,6 +41,13 @@ function mostrarCartas() {
     imgBotCarta3.alt = bot.carta3.mostrar()
     imgBotCarta3.id = bot.cartasMano[2].id
 
+    imgBotCarta1.classList.add('w-32')
+    imgBotCarta1.classList.add('md:w-48')
+    imgBotCarta2.classList.add('w-32')
+    imgBotCarta2.classList.add('md:w-48')
+    imgBotCarta3.classList.add('w-32')
+    imgBotCarta3.classList.add('md:w-48')
+
     divBotCarta1.appendChild(imgBotCarta1)
     divBotCarta2.appendChild(imgBotCarta2)
     divBotCarta3.appendChild(imgBotCarta3)
@@ -109,6 +64,14 @@ function mostrarCartas() {
     imgJugadorRivalCarta1.src = jugadorRival.carta1.locacion
     imgJugadorRivalCarta1.alt = jugadorRival.carta1.mostrar()
     imgJugadorRivalCarta1.id = jugadorRival.cartasMano[0].id
+
+    imgJugadorRivalCarta1.classList.add('w-32')
+    imgJugadorRivalCarta1.classList.add('md:w-48')
+    imgJugadorRivalCarta2.classList.add('w-32')
+    imgJugadorRivalCarta2.classList.add('md:w-48')
+    imgJugadorRivalCarta3.classList.add('w-32')
+    imgJugadorRivalCarta3.classList.add('md:w-48')
+
     imgJugadorRivalCarta2.src = jugadorRival.carta2.locacion
     imgJugadorRivalCarta2.alt = jugadorRival.carta2.mostrar()
     imgJugadorRivalCarta2.id = jugadorRival.cartasMano[1].id
@@ -116,17 +79,26 @@ function mostrarCartas() {
     imgJugadorRivalCarta3.alt = jugadorRival.carta3.mostrar()
     imgJugadorRivalCarta3.id = jugadorRival.cartasMano[2].id
 
-    imgJugadorRivalCarta1.addEventListener('click', () => {
+    imgJugadorRivalCarta1.addEventListener('click', function clickCarta1() {
         const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
         divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta1)
+        jugadorRival.jugarCarta(imgJugadorRivalCarta1.id)
+        imgJugadorRivalCarta1.removeEventListener('click', clickCarta1)
     })
-    imgJugadorRivalCarta2.addEventListener('click', () => {
-        const divCartaJugadaJugadorRival2 = document.getElementById('cartaJugadaJugadorRival2')
-        divCartaJugadaJugadorRival2.appendChild(imgJugadorRivalCarta2)
+
+    imgJugadorRivalCarta2.addEventListener('click', function clickCarta2() {
+        const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
+        divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta2)
+        jugadorRival.jugarCarta(imgJugadorRivalCarta2.id)
+        imgJugadorRivalCarta2.removeEventListener('click', clickCarta2)
+
     })
-    imgJugadorRivalCarta3.addEventListener('click', () => {
-        const divCartaJugadaJugadorRival3 = document.getElementById('cartaJugadaJugadorRival3')
-        divCartaJugadaJugadorRival3.appendChild(imgJugadorRivalCarta3)
+
+    imgJugadorRivalCarta3.addEventListener('click', function clickCarta3() {
+        const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
+        divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta3)
+        jugadorRival.jugarCarta(imgJugadorRivalCarta3.id)
+        imgJugadorRivalCarta3.removeEventListener('click', clickCarta3)
     })
 
     divJugadorRivalCarta1.appendChild(imgJugadorRivalCarta1)
@@ -134,8 +106,34 @@ function mostrarCartas() {
     divJugadorRivalCarta3.appendChild(imgJugadorRivalCarta3)
 
 }
+
+
+/* esto es para probar el while
+bot.puntos = 10
+jugadorRival.puntos = 35
+*/
+
+
 function ComenzarElJuego() {
+    //Esto es para el while
+    /*
+    const partidoTerminado = (bot.puntos >= 30 || jugadorRival.puntos >= 30)
+    console.log('partidoTerminado?')
+    console.log(partidoTerminado)
+    */
+
+
     armarTablero()
-    iniciarRonda()
+    arbitro.nuevaMano()
     mostrarCartas()
+    if (bot.cantarTantos() > 20) {
+        arbitro.hostDiceEnvido(bot.cantarTantos())
+    }
+    /*
+    while (bot.puntos < 30 || jugadorRival < 30) {
+        arbitro.nuevaMano()
+        mostrarCartas()
+    }
+    */
 }
+
