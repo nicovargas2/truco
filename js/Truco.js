@@ -2,22 +2,27 @@
 const bot = new Bot()
 const jugadorRival = new Jugador('')
 const arbitro = new Arbitro()
+const nombreJugador = localStorage.getItem('nombreJugador')
+const puntos = localStorage.getItem('puntos')
+
+//Creo las partes del juego
+const divInfoBot = document.getElementById('info-bot')
+const divMesa = document.getElementById('mesa')
+const divJugadorRivalCartas = document.getElementById('jugadorRivalCartas')
 
 
 //Armo el tablero
 function armarTablero() {
     const spanNombreJugadorRival = document.getElementById('spanNombreJugadorRival')
+    jugadorRival.nombre = localStorage.getItem('nombreJugador')
     spanNombreJugadorRival.innerHTML = jugadorRival.nombre
     const spanNombreBot = document.getElementById('spanNombreBot')
     spanNombreBot.innerHTML = bot.nombre
-
-    divInfoJugador.hidden = true
-    divPrincipalJuego.hidden = false
     divJugadorRivalCartas.hidden = false
     divInfoBot.hidden = false
     divMesa.hidden = false
-
 }
+
 
 function mostrarCartas() {
     //Esto es para saber las cartas de ambos jugadores
@@ -114,22 +119,25 @@ jugadorRival.puntos = 35
 */
 
 
-function ComenzarElJuego() {
-    //Esto es para el while
-    /*
-    const partidoTerminado = (bot.puntos >= 30 || jugadorRival.puntos >= 30)
-    console.log('partidoTerminado?')
-    console.log(partidoTerminado)
-    */
 
+
+
+function comenzarElJuego() {
 
     armarTablero()
     arbitro.nuevaMano()
     mostrarCartas()
-    if (bot.cantarTantos() > 20) {
-        arbitro.hostDiceEnvido(bot.cantarTantos())
-    }
+
+
+
+
+    //Esto es para el while
     /*
+    const partidoTerminado = (bot.puntos >= puntos || jugadorRival.puntos >= puntos)
+    console.log('partidoTerminado?')
+    console.log(partidoTerminado)
+    */
+    /*    
     while (bot.puntos < 30 || jugadorRival < 30) {
         arbitro.nuevaMano()
         mostrarCartas()
@@ -137,3 +145,10 @@ function ComenzarElJuego() {
     */
 }
 
+
+
+if (nombreJugador) {
+    comenzarElJuego()
+} else {
+    window.location.assign("../index.html")
+}

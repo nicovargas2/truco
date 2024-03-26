@@ -1,24 +1,40 @@
-const divPrincipalJuego = document.getElementById('principalJuego')
-const divInfoBot = document.getElementById('info-bot')
+let jugadorRivalNombreIngresado = ''
+
+const longitudMinimaDeNombre = 2
 const divInfoJugador = document.getElementById('info-jugador')
-const divMesa = document.getElementById('mesa')
-const divJugadorRivalCartas = document.getElementById('jugadorRivalCartas')
-
-divPrincipalJuego.hidden = true
-divInfoBot.hidden = true
-divMesa.hidden = true
-divJugadorRivalCartas.hidden = true
-
-
 const buttonJugar = document.getElementById('jugar')
+const nombreJugadorInput = document.querySelector("#nombre-jugador")
 
-const nombreJugador = document.querySelector("#nombre-jugador")
-nombreJugador.addEventListener('input', (e) => {
-    jugadorRival.nombre = e.target.value
+const labelPuntos = document.getElementById('labelPuntos')
+const puntosCheckBox = document.getElementById('puntosCheckBox')
+labelPuntos.innerHTML = 'Puntos: a 30'
+
+const labelFlor = document.getElementById('labelFlor')
+const florCheckBox = document.getElementById('florCheckBox')
+labelFlor.innerHTML = 'Con Flor'
+
+puntosCheckBox.addEventListener('click', () => {
+    if (puntosCheckBox.checked) {
+        labelPuntos.innerHTML = 'Puntos: a 30'
+    } else {
+        labelPuntos.innerHTML = 'Puntos: a 15'
+    }
+})
+
+florCheckBox.addEventListener('click', () => {
+    if (florCheckBox.checked) {
+        labelFlor.innerHTML = 'Con Flor'
+    } else {
+        labelFlor.innerHTML = 'Sin Flor'
+    }
+})
+
+nombreJugadorInput.addEventListener('input', (e) => {
+    jugadorRivalNombreIngresado = e.target.value
 })
 
 const validarNombre = () => {
-    if (jugadorRival.nombre.trim() != '' && jugadorRival.nombre != null && jugadorRival.nombre.trim().length >= 2) {
+    if (jugadorRivalNombreIngresado.trim() != '' && jugadorRivalNombreIngresado != null && jugadorRivalNombreIngresado.trim().length >= longitudMinimaDeNombre) {
         return true
     }
     return false
@@ -26,7 +42,19 @@ const validarNombre = () => {
 
 buttonJugar.addEventListener('click', () => {
     if (validarNombre()) {
-        ComenzarElJuego()
+        let puntos = 15
+        if (puntosCheckBox.checked) {
+            puntos = 30
+        }
+
+        let conFlor = false
+        if (florCheckBox.checked) {
+            conFlor = true
+        }
+        localStorage.setItem('puntos', puntos)
+        localStorage.setItem('conFlor', conFlor)
+        localStorage.setItem('nombreJugador', jugadorRivalNombreIngresado)
+        window.location.assign("./pages/truco.html")
     }
     else {
         Toastify({

@@ -7,6 +7,7 @@ class Arbitro {
         this.ganadorRonda3 = ""
     }
 
+
     nuevaMano() {
         if (this.esManoElBot) {
             this.esManoElBot = false
@@ -20,9 +21,9 @@ class Arbitro {
         const mazo = new Mazo()
         mazo.mezclar()
         bot.nuevaMano(mazo.repartirUnaCarta(), mazo.repartirUnaCarta(), mazo.repartirUnaCarta())
-        bot.cartasMano[0].locacion = "../Truco/img/back.jpg"
-        bot.cartasMano[1].locacion = "../Truco/img/back.jpg"
-        bot.cartasMano[2].locacion = "../Truco/img/back.jpg"
+        bot.cartasMano[0].locacion = "../img/back.jpg"
+        bot.cartasMano[1].locacion = "../img/back.jpg"
+        bot.cartasMano[2].locacion = "../img/back.jpg"
         jugadorRival.nuevaMano(mazo.repartirUnaCarta(), mazo.repartirUnaCarta(), mazo.repartirUnaCarta())
         //bot.mostrarDatos()
         //jugadorRival.mostrarDatos()
@@ -31,32 +32,44 @@ class Arbitro {
 
     //Debe haber una funcion aca que controle los turnos
     controladorDeTurno() {
-
+        if (this.esManoElBot) {
+            this.esManoElBot = false
+            this.esManoElJugadorRival = true
+        } else {
+            this.esManoElBot = true
+            this.esManoElJugadorRival = false
+        }
     }
 
     //graba en LocalStorage los datos del bot y del jugador
     //y los puntos
+    //las cartas jugadas
     persistirEnLocalStorage() {
-        localStorage.setItem('partidaEnCurso', 'partidaEnCurso')
+        localStorage.setItem('juegoEnCurso', true)
         localStorage.setItem('bot', bot)
         localStorage.setItem('jugadorRival', jugadorRival)
     }
-    //las cartas jugadas
 
     hostDiceEnvido(tantos) {
-
         Swal.fire({
             title: "El host cantó envido",
             showDenyButton: true,
             confirmButtonText: "Quiero!",
-            denyButtonText: `No quiero.`
+            denyButtonText: `No quiero.`,
+            icon: "question"
         }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
                 Swal.fire("Ok!", (tantos).toString(), "success");
             } else if (result.isDenied) {
                 Swal.fire("No querido", "", "info");
             }
+        });
+    }
+
+    hostDiceFlor() {
+        Swal.fire({
+            title: "El host cantó Flor!",
+            icon: "info"
         });
     }
 }
