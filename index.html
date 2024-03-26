@@ -17,83 +17,27 @@
         <div class="flex flex-row m-10 p-10">
             <div id="info-jugador">
                 <input type="text" id="nombre-jugador" placeholder="ingrese su nombre"
-                    class="text-gray-900 placeholder:text-gray-400">
+                    class="text-gray-900 placeholder:text-gray-400 mb-2">
+                <br>
+                <label id="labelPuntos"></label><br>
+                <label class="switch mb-2">
+                    <input id="puntosCheckBox" type="checkbox" checked>
+                    <span class="slider round"></span>
+                </label>
+                <br>
+                <label id="labelFlor"></label><br>
+                <label class="switch mb-2">
+                    <input id="florCheckBox" type="checkbox" checked>
+                    <span class="slider round"></span>
+                </label>
                 <br>
                 <button type="submit" id="jugar"
                     class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Jugar!</button>
             </div>
         </div>
-        <!-- Juego principal -->
-        <div id="principalJuego" style="display: flex; flex-direction: column;">
-            <div id="info-bot">
-                <!-- Cartas Bot -->
-                <div class="text-center">
-                    <span id="spanNombreBot"></span>
-                </div>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div id="botCarta1"></div>
-                            </td>
-                            <td>
-                                <div id="botCarta2"></div>
-                            </td>
-                            <td>
-                                <div id="botCarta3"></div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <!-- Mesa -->
-            <div id="mesa" hidden class='w-auto h-auto bg-green-800'>
-                <div class="flex-container-row">
-                    <div id="cartaJugadaBot1"></div>
-                </div>
-                <div class="flex-container-row">
-                    <div id="cartaJugadaJugadorRival1"></div>
-                </div>
-            </div>
-            <!-- Cartas Jugador Rival -->
-            <div id="jugadorRivalCartas" class="text-center">
-                <div>
-                    <span id="spanNombreJugadorRival"></span>
-                </div>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div id="jugadorRivalCarta1"></div>
-                            </td>
-                            <td>
-                                <div id="jugadorRivalCarta2"></div>
-                            </td>
-                            <td>
-                                <div id="jugadorRivalCarta3"></div>
-                            </td>
-                            <td id="accionesJugador">
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div>
-
-                </div>
-            </div>
-        </div>
-
     </div>
 
-    <script src="./js/Mazo.js"></script>
-    <script src="./js/Ronda.js"></script>
-    <script src="./js/Jugador.js"></script>
-    <script src="./js/Carta.js"></script>
-    <script src="./js/Bot.js"></script>
-    <script src="./js/Arbitro.js"></script>
     <script src="./js/Inicio.js"></script>
-    <script src="./js/Truco.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 
