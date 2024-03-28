@@ -23,6 +23,9 @@ function armarTablero() {
     divJugadorRivalCartas.hidden = false
     divInfoBot.hidden = false
     divMesa.hidden = false
+
+    const tdId = document.getElementById('tablaNombreJugadorRival')
+    tdId.innerHTML = jugadorRival.nombre
 }
 
 
@@ -39,21 +42,22 @@ function mostrarCartas() {
     const imgBotCarta3 = document.createElement('img')
 
     imgBotCarta1.src = bot.carta1.locacion
+    imgBotCarta1.src = "../img/back.jpg"
     imgBotCarta1.alt = bot.carta1.mostrar()
     imgBotCarta1.id = bot.cartasMano[0].id
-    imgBotCarta2.src = bot.carta2.locacion
+    imgBotCarta2.src = "../img/back.jpg"
     imgBotCarta2.alt = bot.carta2.mostrar()
     imgBotCarta2.id = bot.cartasMano[1].id
-    imgBotCarta3.src = bot.carta3.locacion
+    imgBotCarta3.src = "../img/back.jpg"
     imgBotCarta3.alt = bot.carta3.mostrar()
     imgBotCarta3.id = bot.cartasMano[2].id
 
-    imgBotCarta1.classList.add('w-32')
-    imgBotCarta1.classList.add('md:w-48')
-    imgBotCarta2.classList.add('w-32')
-    imgBotCarta2.classList.add('md:w-48')
-    imgBotCarta3.classList.add('w-32')
-    imgBotCarta3.classList.add('md:w-48')
+    imgBotCarta1.classList.add('w-24')
+    //imgBotCarta1.classList.add('md:w-48')
+    imgBotCarta2.classList.add('w-24')
+    //imgBotCarta2.classList.add('md:w-48')
+    imgBotCarta3.classList.add('w-24')
+    //imgBotCarta3.classList.add('md:w-48')
 
     divBotCarta1.appendChild(imgBotCarta1)
     divBotCarta2.appendChild(imgBotCarta2)
@@ -71,14 +75,6 @@ function mostrarCartas() {
     imgJugadorRivalCarta1.src = jugadorRival.carta1.locacion
     imgJugadorRivalCarta1.alt = jugadorRival.carta1.mostrar()
     imgJugadorRivalCarta1.id = jugadorRival.cartasMano[0].id
-
-    imgJugadorRivalCarta1.classList.add('w-32')
-    imgJugadorRivalCarta1.classList.add('md:w-48')
-    imgJugadorRivalCarta2.classList.add('w-32')
-    imgJugadorRivalCarta2.classList.add('md:w-48')
-    imgJugadorRivalCarta3.classList.add('w-32')
-    imgJugadorRivalCarta3.classList.add('md:w-48')
-
     imgJugadorRivalCarta2.src = jugadorRival.carta2.locacion
     imgJugadorRivalCarta2.alt = jugadorRival.carta2.mostrar()
     imgJugadorRivalCarta2.id = jugadorRival.cartasMano[1].id
@@ -86,12 +82,21 @@ function mostrarCartas() {
     imgJugadorRivalCarta3.alt = jugadorRival.carta3.mostrar()
     imgJugadorRivalCarta3.id = jugadorRival.cartasMano[2].id
 
+    imgJugadorRivalCarta1.classList.add('w-24')
+    //imgJugadorRivalCarta1.classList.add('md:w-48')
+    imgJugadorRivalCarta2.classList.add('w-24')
+    //imgJugadorRivalCarta2.classList.add('md:w-48')
+    imgJugadorRivalCarta3.classList.add('w-24')
+    //imgJugadorRivalCarta3.classList.add('md:w-48')
+
+
     imgJugadorRivalCarta1.addEventListener('click', function clickCarta1() {
         if (jugadorRival.habilitadoAJugar) {
             const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
             divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta1)
-            jugadorRival.jugarCarta(imgJugadorRivalCarta1.id)
             imgJugadorRivalCarta1.removeEventListener('click', clickCarta1)
+            arbitro.agregarCartaJugadaJugadorRival(jugadorRival.carta1)
+            jugadorRival.jugarCarta(imgJugadorRivalCarta1.id)
             arbitro.controladorDeTurno()
         }
     })
@@ -100,8 +105,9 @@ function mostrarCartas() {
         if (jugadorRival.habilitadoAJugar) {
             const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
             divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta2)
-            jugadorRival.jugarCarta(imgJugadorRivalCarta2.id)
             imgJugadorRivalCarta2.removeEventListener('click', clickCarta2)
+            arbitro.agregarCartaJugadaJugadorRival(jugadorRival.carta2)
+            jugadorRival.jugarCarta(imgJugadorRivalCarta2.id)
             arbitro.controladorDeTurno()
         }
     })
@@ -110,8 +116,9 @@ function mostrarCartas() {
         if (jugadorRival.habilitadoAJugar) {
             const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
             divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta3)
-            jugadorRival.jugarCarta(imgJugadorRivalCarta3.id)
             imgJugadorRivalCarta3.removeEventListener('click', clickCarta3)
+            arbitro.agregarCartaJugadaJugadorRival(jugadorRival.carta3)
+            jugadorRival.jugarCarta(imgJugadorRivalCarta3.id)
             arbitro.controladorDeTurno()
         }
     })

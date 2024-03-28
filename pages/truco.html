@@ -37,12 +37,39 @@
                 </table>
             </div>
             <!-- Mesa -->
-            <div id="mesa" hidden class='w-auto h-auto bg-green-800'>
-                <div class="flex-container-row">
-                    <div id="cartaJugadaBot1"></div>
+            <div class="flex-container-row">
+
+                <div id="mesa" hidden class='w-auto h-auto bg-green-800'>
+                    <div class="flex-container-row">
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="flex-container-row" id="cartaJugadaBot1"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="flex-container-row" id="cartaJugadaJugadorRival1"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
-                <div class="flex-container-row">
-                    <div id="cartaJugadaJugadorRival1"></div>
+                <div class="bg-lime-800 text-white">
+                    <table class="border-separate border border-slate-500 ...">
+                        <thead>
+                            <tr>
+                                <th>Puntos Host</th>
+                                <th><span id='tablaNombreJugadorRival'></span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> <span id="puntosHost">0</span> </td>
+                                <td> <span id="puntosJugadorRival">0</span> </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <!-- Cartas Jugador Rival -->
