@@ -4,6 +4,8 @@ const jugadorRival = new Jugador('')
 const arbitro = new Arbitro()
 const nombreJugador = localStorage.getItem('nombreJugador')
 const puntos = localStorage.getItem('puntos')
+const conFlor = localStorage.getItem('conFlor')
+
 
 //Creo las partes del juego
 const divInfoBot = document.getElementById('info-bot')
@@ -26,8 +28,8 @@ function armarTablero() {
 
 function mostrarCartas() {
     //Esto es para saber las cartas de ambos jugadores
-    console.log(bot.mostrarDatos())
-    console.log(jugadorRival.mostrarDatos())
+    bot.mostrarDatos()
+    jugadorRival.mostrarDatos()
     const divBotCarta1 = document.getElementById('botCarta1')
     const divBotCarta2 = document.getElementById('botCarta2')
     const divBotCarta3 = document.getElementById('botCarta3')
@@ -85,25 +87,33 @@ function mostrarCartas() {
     imgJugadorRivalCarta3.id = jugadorRival.cartasMano[2].id
 
     imgJugadorRivalCarta1.addEventListener('click', function clickCarta1() {
-        const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
-        divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta1)
-        jugadorRival.jugarCarta(imgJugadorRivalCarta1.id)
-        imgJugadorRivalCarta1.removeEventListener('click', clickCarta1)
+        if (jugadorRival.habilitadoAJugar) {
+            const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
+            divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta1)
+            jugadorRival.jugarCarta(imgJugadorRivalCarta1.id)
+            imgJugadorRivalCarta1.removeEventListener('click', clickCarta1)
+            arbitro.controladorDeTurno()
+        }
     })
 
     imgJugadorRivalCarta2.addEventListener('click', function clickCarta2() {
-        const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
-        divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta2)
-        jugadorRival.jugarCarta(imgJugadorRivalCarta2.id)
-        imgJugadorRivalCarta2.removeEventListener('click', clickCarta2)
-
+        if (jugadorRival.habilitadoAJugar) {
+            const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
+            divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta2)
+            jugadorRival.jugarCarta(imgJugadorRivalCarta2.id)
+            imgJugadorRivalCarta2.removeEventListener('click', clickCarta2)
+            arbitro.controladorDeTurno()
+        }
     })
 
     imgJugadorRivalCarta3.addEventListener('click', function clickCarta3() {
-        const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
-        divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta3)
-        jugadorRival.jugarCarta(imgJugadorRivalCarta3.id)
-        imgJugadorRivalCarta3.removeEventListener('click', clickCarta3)
+        if (jugadorRival.habilitadoAJugar) {
+            const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
+            divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta3)
+            jugadorRival.jugarCarta(imgJugadorRivalCarta3.id)
+            imgJugadorRivalCarta3.removeEventListener('click', clickCarta3)
+            arbitro.controladorDeTurno()
+        }
     })
 
     divJugadorRivalCarta1.appendChild(imgJugadorRivalCarta1)

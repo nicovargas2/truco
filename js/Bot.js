@@ -6,10 +6,9 @@ class Bot extends Jugador {
             return new Promise((resolve, reject) => {
                 setInterval(() => {
                     console.log('ya es mi turno?')
-                    if (arbitro.esManoElBot) {
+                    console.log(arbitro.turnoDelBot)
+                    if (arbitro.turnoDelBot) {
                         resolve()
-                    } else {
-                        reject('Todavia no')
                     }
                 }, 2000);
             })
@@ -25,20 +24,37 @@ class Bot extends Jugador {
 
 
     juegue() {
-        if (arbitro.ganadorRonda1 == '') {
-            if (this.cantarFlor() == 'Flor') {
-                this.flor()
-            } else {
-                this.jugarEnvido()
-            }
+        if (arbitro.ronda1Terminada) {
+            if (arbitro.ronda2Terminada) {
+                if (arbitro.ronda1Terminada) {
+                    //jugar la ronda 3
 
+                } else {
+                    //jugar la ronda 2
+                }
+            }
+        } else {
+            //jugar la ronda 1
+            if (arbitro.envidoCantado || arbitro.florCantada) {
+                this.jugarUnaCarta()
+            } else {
+                if (this.cantarFlor() == 'Flor') {
+                    this.deboMostrarMisCartasAlfinal = true
+                    this.flor()
+                } else {
+                    this.jugarEnvido()
+                }
+            }
         }
     }
 
+    jugarUnaCarta() {
+
+    }
 
     jugarEnvido() {
         const limiteMinEnvido = 20
-        if (this.cantarTantos() > limiteMinEnvido) {
+        if (this.cantarTantos() >= limiteMinEnvido) {
             arbitro.hostDiceEnvido(bot.cantarTantos())
         }
     }
