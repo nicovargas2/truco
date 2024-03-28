@@ -13,6 +13,14 @@ const labelFlor = document.getElementById('labelFlor')
 const florCheckBox = document.getElementById('florCheckBox')
 labelFlor.innerHTML = 'Con Flor'
 
+
+
+const juegoEnCurso = localStorage.getItem('juegoEnCurso')
+
+if (juegoEnCurso) {
+    window.location.assign("./pages/truco.html")
+}
+
 puntosCheckBox.addEventListener('click', () => {
     if (puntosCheckBox.checked) {
         labelPuntos.innerHTML = 'Puntos: a 30'

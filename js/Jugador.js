@@ -4,6 +4,7 @@ class Jugador {
         this.puntos = 0
         this.habilitadoAJugar = false
         this.esMano = false
+        this.deboMostrarMisCartasAlfinal = false
     }
 
     mostrarDatos() {
@@ -59,38 +60,36 @@ class Jugador {
         let opcion3 = 0
 
         if (this.carta1.palo == this.carta2.palo) {
-            opcion1 = puntosBase + this.carta1.valorNumero + this.carta2.valorNumero
-            if (opcion1 > 33) {
-                if (this.carta1.valorNumero >= 10 & this.carta1.valorNumero <= 12) {
-                    opcion1 = opcion1 - this.carta1.valorNumero
-                }
-                if (this.carta2.valorNumero >= 10 & this.carta2.valorNumero <= 12) {
-                    opcion1 = opcion1 - this.carta2.valorNumero
-                }
+            opcion1 = puntosBase
+            if (this.carta1.valorNumero < 10) {
+                opcion1 += this.carta1.valorNumero
+            }
+
+            if (this.carta2.valorNumero < 10) {
+                opcion1 += this.carta2.valorNumero
             }
         }
 
         if (this.carta1.palo == this.carta3.palo) {
-            opcion2 = puntosBase + this.carta1.valorNumero + this.carta3.valorNumero
-            if (opcion2 > 33) {
-                if (this.carta1.valorNumero >= 10 & this.carta1.valorNumero <= 12) {
-                    opcion2 = opcion2 - this.carta1.valorNumero
-                }
-                if (this.carta3.valorNumero >= 10 & this.carta3.valorNumero <= 12) {
-                    opcion2 = opcion2 - this.carta3.valorNumero
-                }
+            opcion2 = puntosBase
+            if (this.carta1.valorNumero < 10) {
+                opcion2 += this.carta1.valorNumero
             }
+
+            if (this.carta3.valorNumero < 10) {
+                opcion2 += this.carta3.valorNumero
+            }
+
         }
 
         if (this.carta3.palo == this.carta2.palo) {
-            opcion3 = puntosBase + this.carta3.valorNumero + this.carta2.valorNumero
-            if (opcion3 > 33) {
-                if (this.carta3.valorNumero >= 10 & this.carta3.valorNumero <= 12) {
-                    opcion3 = opcion3 - this.carta3.valorNumero
-                }
-                if (this.carta2.valorNumero >= 10 & this.carta2.valorNumero <= 12) {
-                    opcion3 = opcion3 - this.carta2.valorNumero
-                }
+            opcion3 = puntosBase
+            if (this.carta3.valorNumero < 10) {
+                opcion3 += this.carta3.valorNumero
+            }
+
+            if (this.carta2.valorNumero < 10) {
+                opcion3 += this.carta2.valorNumero
             }
         }
 
