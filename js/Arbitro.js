@@ -3,7 +3,7 @@ class Arbitro {
         this.esManoElBot = false
         this.turnoDelBot = false
         this.envidoCantado = false
-        this.florCantada = false
+        this.florCantadaPorElBot = false
         this.trucoCantado = false
         this.ronda1Terminada = false
         this.ronda2Terminada = false
@@ -61,8 +61,10 @@ class Arbitro {
     }
 
     nuevaMano() {
+        bot.deboMostrarMisCartasAlfinal = false
+        jugadorRival.deboMostrarMisCartasAlfinal = false
         this.envidoCantado = false
-        this.florCantada = false
+        this.florCantadaPorElBot = false
         this.trucoCantado = false
         this.ronda1Terminada = false
         this.ronda2Terminada = false
@@ -118,6 +120,31 @@ class Arbitro {
         this.persistirEnLocalStorage()
     }
 
+    controladorDeRondas() {
+        if (bot.cartasMano.length == 2 && jugadorRival.cartasMano.length == 2) {
+            this.ronda1Terminada = true
+        }
+        if (bot.cartasMano.length == 1 && jugadorRival.cartasMano.length == 1) {
+            this.ronda2Terminada = true
+        }
+        if (bot.cartasMano.length == 0 && jugadorRival.cartasMano.length == 0) {
+            this.ronda3Terminada = true
+        }
+
+        /* 
+        if (this.ganadorRonda1 == this.ganadorRonda2) {
+            this.terminarRondas()
+        }
+        */
+
+        if (this.ronda1Terminada && this.ronda2Terminada && this.ronda3Terminada) {
+            this.terminarRondas()
+        }
+
+        this.persistirEnLocalStorage()
+
+    }
+
     controladorDeTurno() {
         if (this.turnoDelBot) {
             this.turnoDelBot = false
@@ -127,11 +154,24 @@ class Arbitro {
             this.turnoDelBot = true
             bot.habilitadoAJugar = true
             jugadorRival.habilitadoAJugar = false
+
+            bot.juegue()
         }
+
 
         this.persistirEnLocalStorage()
     }
 
+    terminarRondas() {
+        setTimeout(() => {
+            alert('Rondas finalizadas, recalculo tantos e inicia de nuevo...')
+            recalculoTantos()
+        }, 1500);
+    }
+
+    recalculoTantos() {
+        window.location.assign("./pages/truco.html")
+    }
     persistirEnLocalStorage() {
         const jsonBot = JSON.stringify(bot)
         const jsonJugadorRival = JSON.stringify(jugadorRival)
@@ -145,7 +185,7 @@ class Arbitro {
     }
 
     hostDiceEnvido(tantosBot) {
-
+        this.envidoCantado = true
         Swal.fire({
             title: "El host cantó envido",
             showDenyButton: true,
@@ -163,14 +203,16 @@ class Arbitro {
             } else if (result.isDenied) {
                 Swal.fire("No querido", "1 punto para el Host", "info");
                 bot.sumarPuntos(1)
-                this.persistirEnLocalStorage()
+                //this.persistirEnLocalStorage()
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 Swal.fire("Flor!!", "Recuerde mostrar las cartas al final", "info");
-                this.florCantada = true
-                this.persistirEnLocalStorage()
+                this.florCantadaPorElBot = true
+                //this.persistirEnLocalStorage()
             }
+        }).finally(() => {
+            this.persistirEnLocalStorage()
+            this.controladorDeTurno
         });
-        this.controladorDeTurno()
     }
 
     hostDiceFlor() {
@@ -178,12 +220,15 @@ class Arbitro {
             title: "El host cantó Flor!",
             icon: "info"
         });
+
+        //this.controladorDeTurno()
         this.persistirEnLocalStorage()
     }
 
     resolverTantos(tantosBot, tantosJugadorRival) {
         if (this.esManoElBot) {
             if (tantosBot >= tantosJugadorRival) {
+                this.deboMostrarMisCartasAlfinal = true
                 bot.sumarPuntos(2)
             } else {
                 jugadorRival.sumarPuntos(2)
@@ -192,6 +237,7 @@ class Arbitro {
             if (tantosJugadorRival >= tantosBot) {
                 jugadorRival.sumarPuntos(2)
             } else {
+                this.deboMostrarMisCartasAlfinal = true
                 bot.sumarPuntos(2)
             }
         }
