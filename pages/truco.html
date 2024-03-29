@@ -13,8 +13,27 @@
 
 <body class="bg-lime-200">
     <div class="container">
+        <div class="flex flex-row bg-lime-700 text-white w-20">
+            <div class="items-center">
+
+                <table class="border border-separate text-sm text-center">
+                    <thead>
+                        <tr>
+                            <th>Host</th>
+                            <th><span id='tablaNombreJugadorRival'></span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td> <span id="puntosHost">0</span> </td>
+                            <td> <span id="puntosJugadorRival">0</span> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <!-- Juego principal -->
-        <div id="principalJuego" style="display: flex; flex-direction: column;">
+        <div id="principalJuego" class="flex flex-col">
             <div id="info-bot" hidden>
                 <!-- Cartas Bot -->
                 <div class="text-center">
@@ -39,7 +58,7 @@
             <!-- Mesa -->
             <div class="flex-container-row">
 
-                <div id="mesa" hidden class='w-auto h-auto bg-green-800'>
+                <div id="mesa" hidden class='w-auto h-auto min-w-96 bg-green-800'>
                     <div class="flex-container-row">
                         <table>
                             <tr>
@@ -54,22 +73,6 @@
                             </tr>
                         </table>
                     </div>
-                </div>
-                <div class="bg-lime-800 text-white">
-                    <table class="border-separate border border-slate-500 ...">
-                        <thead>
-                            <tr>
-                                <th>Puntos Host</th>
-                                <th><span id='tablaNombreJugadorRival'></span></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td> <span id="puntosHost">0</span> </td>
-                                <td> <span id="puntosJugadorRival">0</span> </td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
             <!-- Cartas Jugador Rival -->
@@ -95,11 +98,6 @@
                         </tr>
                     </tbody>
                 </table>
-                <div>
-                    <table id="acciones">
-
-                    </table>
-                </div>
             </div>
         </div>
 

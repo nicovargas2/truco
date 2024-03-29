@@ -2,15 +2,20 @@ class Bot extends Jugador {
     constructor() {
         super('Host')
 
+        this.limiteTantosEnvido = 20
+
         const preguntarSiEsElTurnoDelBot = () => {
             return new Promise((resolve) => {
                 setInterval(() => {
+                    /* con este pedacito de codigo se verifica 
+                    cada vez que pregunta el bot si es su turno
                     console.log('ya es mi turno?')
                     console.log(arbitro.turnoDelBot)
+                    */
                     if (arbitro.turnoDelBot) {
                         resolve()
                     }
-                }, 3000);
+                }, 1000);
             })
         }
 
@@ -19,21 +24,17 @@ class Bot extends Jugador {
         preguntar
             .then(
                 () => {
-                    console.log('deberia pasar por aca')
                     this.juegue()
                 })
             .catch(
                 (error) => {
                     console.log(error)
                 });
-
     }
-
 
     juegue() {
         if (arbitro.ronda1Terminada == false) {
-            console.log('el bot sigue en la 1')
-            if ((this.cantarFlor() == 'Flor' && arbitro.florCantadaPorElBot == false) || (this.cantarTantos() >= 20 && arbitro.envidoCantado == false)) {
+            if ((this.cantarFlor() == 'Flor' && arbitro.florCantadaPorElBot == false) || (this.cantarTantos() >= this.limiteTantosEnvido && arbitro.envidoCantado == false)) {
                 if (this.cantarFlor() == 'Flor') {
                     this.flor()
                     this.deboMostrarMisCartasAlfinal = true
@@ -48,40 +49,49 @@ class Bot extends Jugador {
         }
 
         if (arbitro.ronda2Terminada == false) {
-            console.log('2')
             this.jugarUnaCarta()
         }
 
         if (arbitro.ronda3Terminada == false) {
-            console.log('3')
             this.jugarUnaCarta()
+        }
+    }
+
+    decidirEnvido() {
+        if (this.cantarTantos() >= this.limiteTantosEnvido) {
+            const tantosJugadorRival = jugadorRival.cantarTantos()
+            let mensaje = bot.nombre + ' tiene: ' + (this.cantarTantos()).toString() + ', jugador ' + jugadorRival.nombre + ' tiene: ' + tantosJugadorRival
+            Swal.fire("Quiero!", mensaje, "success");
+            arbitro.resolverTantos(this.cantarTantos(), tantosJugadorRival)
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "el Host dice: Envido no querido",
+                text: "1 punto para usted!"
+            });
         }
 
     }
 
     jugarUnaCarta() {
-        console.log('Jugar una carta')
         arbitro.controladorDeRondas()
 
         if (this.juegaRonda1()) {
             this.ponerLaCartaEnLaMesa(bot.carta1)
             arbitro.agregarCartaJugadaBot(bot.carta1)
             bot.jugarCarta(bot.cartasMano[0].id)
-            arbitro.controladorDeRondas()
             arbitro.controladorDeTurno()
         }
         if (this.juegaRonda2()) {
             this.ponerLaCartaEnLaMesa(bot.carta2)
             arbitro.agregarCartaJugadaBot(bot.carta2)
             bot.jugarCarta(bot.cartasMano[0].id)
-            arbitro.controladorDeRondas()
             arbitro.controladorDeTurno()
         }
         if (this.juegaRonda3()) {
             this.ponerLaCartaEnLaMesa(bot.carta3)
             arbitro.agregarCartaJugadaBot(bot.carta3)
             bot.jugarCarta(bot.cartasMano[0].id)
-            arbitro.controladorDeRondas()
             arbitro.controladorDeTurno()
         }
     }

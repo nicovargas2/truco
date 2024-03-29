@@ -5,6 +5,7 @@ const arbitro = new Arbitro()
 const nombreJugador = localStorage.getItem('nombreJugador')
 const puntos = localStorage.getItem('puntos')
 const conFlor = localStorage.getItem('conFlor')
+const tdAccionesJugador = document.getElementById('accionesJugador')
 
 
 //Creo las partes del juego
@@ -12,6 +13,10 @@ const divInfoBot = document.getElementById('info-bot')
 const divMesa = document.getElementById('mesa')
 const divJugadorRivalCartas = document.getElementById('jugadorRivalCartas')
 
+
+function envido() {
+
+}
 
 //Armo el tablero
 function armarTablero() {
@@ -26,6 +31,45 @@ function armarTablero() {
 
     const tdId = document.getElementById('tablaNombreJugadorRival')
     tdId.innerHTML = jugadorRival.nombre
+
+}
+
+function mostrarBotonesPrimerRonda() {
+    const buttonEnvido = document.createElement('button')
+    buttonEnvido.id = 'envido'
+    buttonEnvido.innerHTML = 'Envido'
+    buttonEnvido.classList.add('rounded-md', 'bg-indigo-600', 'm-1', 'px-3', 'py-2', 'text-sm', 'font-semibold', 'text-white', 'hover:bg-indigo-500', 'focus-visible:outline', 'focus-visible:outline-2', 'focus-visible:outline-offset-2', 'focus-visible:outline-indigo-600')
+
+
+    buttonEnvido.addEventListener('click', () => {
+        arbitro.envidoCantado = true
+        arbitro.esconderBotonEnvidoJugadorRival()
+        arbitro.esconderBotonFlorJugadorRival()
+        bot.decidirEnvido()
+    })
+
+    tdAccionesJugador.appendChild(buttonEnvido)
+    const br = document.createElement('br')
+    tdAccionesJugador.appendChild(br)
+
+
+    if (localStorage.getItem('conFlor')) {
+        const buttonFlor = document.createElement('button')
+        buttonFlor.id = 'flor'
+        buttonFlor.classList.add('rounded-md', 'bg-indigo-600', 'm-1', 'px-3', 'py-2', 'text-sm', 'font-semibold', 'text-white', 'hover:bg-indigo-500', 'focus-visible:outline', 'focus-visible:outline-2', 'focus-visible:outline-offset-2', 'focus-visible:outline-indigo-600')
+        buttonFlor.innerHTML = 'Flor!'
+        buttonFlor.addEventListener('click', function cantarFlorJugadorRivalButton() {
+            if (jugadorRival.cantarFlor() == 'Flor') {
+                Swal.fire({
+                    title: "Flor!",
+                    icon: "info"
+                });
+                buttonFlor.removeEventListener('click', cantarFlorJugadorRivalButton)
+            }
+        })
+        tdAccionesJugador.appendChild(buttonFlor)
+
+    }
 }
 
 
@@ -98,6 +142,7 @@ function mostrarCartas() {
             arbitro.agregarCartaJugadaJugadorRival(jugadorRival.carta1)
             jugadorRival.jugarCarta(imgJugadorRivalCarta1.id)
             arbitro.controladorDeTurno()
+            arbitro.controladorDeRondas()
         }
     })
 
@@ -109,6 +154,8 @@ function mostrarCartas() {
             arbitro.agregarCartaJugadaJugadorRival(jugadorRival.carta2)
             jugadorRival.jugarCarta(imgJugadorRivalCarta2.id)
             arbitro.controladorDeTurno()
+            arbitro.controladorDeRondas()
+
         }
     })
 
@@ -120,6 +167,8 @@ function mostrarCartas() {
             arbitro.agregarCartaJugadaJugadorRival(jugadorRival.carta3)
             jugadorRival.jugarCarta(imgJugadorRivalCarta3.id)
             arbitro.controladorDeTurno()
+            arbitro.controladorDeRondas()
+
         }
     })
 
@@ -136,32 +185,12 @@ jugadorRival.puntos = 35
 */
 
 
-
-
-
 function comenzarElJuego() {
-
     armarTablero()
     arbitro.nuevaMano()
     mostrarCartas()
-
-
-
-
-    //Esto es para el while
-    /*
-    const partidoTerminado = (bot.puntos >= puntos || jugadorRival.puntos >= puntos)
-    console.log('partidoTerminado?')
-    console.log(partidoTerminado)
-    */
-    /*    
-    while (bot.puntos < 30 || jugadorRival < 30) {
-        arbitro.nuevaMano()
-        mostrarCartas()
-    }
-    */
+    mostrarBotonesPrimerRonda()
 }
-
 
 
 if (nombreJugador) {
