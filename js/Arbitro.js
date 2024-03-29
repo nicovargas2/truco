@@ -23,41 +23,48 @@ class Arbitro {
         this.cartasJugadasJugadorRival.push(carta)
     }
 
-    evaluarRondas() {
-        if (!this.ronda1Terminada) {
-            if (this.ronda2Terminada) {
-                if (this.ronda3Terminada) {
-                    console.log('Rondas terminadas')
-                } else {
-                    this.evaluarRonda3()
-                }//fin if ronda3Terminada
-            } else {
-                this.evaluarRonda2()
-            }//fin if ronda2Terminada
+    esconderBotonFlorJugadorRival() {
+        const buttonFlor = document.getElementById('flor')
+        buttonFlor.hidden = true
+    }
+
+    esconderBotonEnvidoJugadorRival() {
+        const buttonEnvido = document.getElementById('envido')
+        buttonEnvido.hidden = true
+    }
+
+    ocultarBotonTrucoJugadorRival() {
+        const botonTruco = document.getElementById('truco')
+        if (botonTruco) {
+            botonTruco.hidden = true
+        }
+    }
+
+    mostrarBotonContinuar() {
+        const AccionesJugador = document.getElementById('accionesJugador')
+        const buttonContinuar = document.createElement('button')
+        buttonContinuar.id = 'continuar'
+        buttonContinuar.innerHTML = 'continuar!'
+        buttonContinuar.classList.add('rounded-md', 'bg-indigo-600', 'm-1', 'px-3', 'py-2', 'text-sm', 'font-semibold', 'text-white', 'hover:bg-indigo-500', 'focus-visible:outline', 'focus-visible:outline-2', 'focus-visible:outline-offset-2', 'focus-visible:outline-indigo-600')
+        buttonContinuar.addEventListener('click', () => {
+            window.location.assign("./truco.html")
+        })
+        AccionesJugador.appendChild(buttonContinuar)
+    }
+
+    mostrarBotonTrucoJugadorRival() {
+        const botonTruco = document.getElementById('truco')
+        if (botonTruco) {
+
         } else {
-            this.evaluarRonda1()
-        }//fin if ronda1Terminada
-    }//fin rutina
-
-
-    evaluarRonda1() {
-        if (bot.cartasMano.length == 2 & jugadorRival.cartasMano.length == 2) {
-            this.ronda1Terminada = true
-            //falta evaluar ganador
+            const AccionesJugador = document.getElementById('accionesJugador')
+            const buttonTruco = document.createElement('button')
+            buttonTruco.id = 'truco'
+            buttonTruco.innerHTML = 'Truco!'
+            buttonTruco.classList.add('rounded-md', 'bg-indigo-600', 'm-1', 'px-3', 'py-2', 'text-sm', 'font-semibold', 'text-white', 'hover:bg-indigo-500', 'focus-visible:outline', 'focus-visible:outline-2', 'focus-visible:outline-offset-2', 'focus-visible:outline-indigo-600')
+            AccionesJugador.appendChild(buttonTruco)
         }
-    }
 
-    evaluarRonda2() {
-        if (bot.cartasMano.length == 1 & jugadorRival.cartasMano.length == 1) {
-            this.ronda1Terminada = true
-            //falta evaluar ganador
-        }
-    }
-    evaluarRonda3() {
-        if (bot.cartasMano.length == 0 & jugadorRival.cartasMano.length == 0) {
-            this.ronda1Terminada = true
-            //falta evaluar ganador
-        }
     }
 
     nuevaMano() {
@@ -105,8 +112,6 @@ class Arbitro {
             }
         }
 
-
-        console.log('Nueva mano')
         const mazo = new Mazo()
         mazo.mezclar()
         bot.nuevaMano(mazo.repartirUnaCarta(), mazo.repartirUnaCarta(), mazo.repartirUnaCarta())
@@ -123,6 +128,9 @@ class Arbitro {
     controladorDeRondas() {
         if (bot.cartasMano.length == 2 && jugadorRival.cartasMano.length == 2) {
             this.ronda1Terminada = true
+            this.esconderBotonEnvidoJugadorRival()
+            this.esconderBotonFlorJugadorRival()
+            this.mostrarBotonTrucoJugadorRival()
         }
         if (bot.cartasMano.length == 1 && jugadorRival.cartasMano.length == 1) {
             this.ronda2Terminada = true
@@ -131,14 +139,11 @@ class Arbitro {
             this.ronda3Terminada = true
         }
 
-        /* 
-        if (this.ganadorRonda1 == this.ganadorRonda2) {
-            this.terminarRondas()
-        }
-        */
-
         if (this.ronda1Terminada && this.ronda2Terminada && this.ronda3Terminada) {
-            this.terminarRondas()
+            const buttonContinuar = document.getElementById('continuar')
+            if (!buttonContinuar) {
+                this.terminarRondas()
+            }
         }
 
         this.persistirEnLocalStorage()
@@ -157,21 +162,27 @@ class Arbitro {
 
             bot.juegue()
         }
-
-
         this.persistirEnLocalStorage()
     }
 
     terminarRondas() {
+        this.ocultarBotonTrucoJugadorRival()
+        this.mostrarBotonContinuar()
         setTimeout(() => {
-            alert('Rondas finalizadas, recalculo tantos e inicia de nuevo...')
-            recalculoTantos()
-        }, 1500);
+            Toastify({
+                text: "Rondas finalizadas, haga clic en continuar",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #ed1f11, #c7308f)",
+                },
+            }).showToast();
+        }, 1000);
     }
 
     recalculoTantos() {
-        window.location.assign("./pages/truco.html")
+        window.location.assign("./index.html")
     }
+
     persistirEnLocalStorage() {
         const jsonBot = JSON.stringify(bot)
         const jsonJugadorRival = JSON.stringify(jugadorRival)
@@ -192,7 +203,7 @@ class Arbitro {
             confirmButtonText: "Quiero!",
             denyButtonText: `No quiero.`,
             showCancelButton: true,
-            cancelButtonText: `tengo Flor!`,
+            cancelButtonText: `Tengo Flor!`,
             icon: "question"
         }).then((result) => {
             if (result.isConfirmed) {
@@ -205,23 +216,33 @@ class Arbitro {
                 bot.sumarPuntos(1)
                 //this.persistirEnLocalStorage()
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire("Flor!!", "Recuerde mostrar las cartas al final", "info");
-                this.florCantadaPorElBot = true
-                //this.persistirEnLocalStorage()
+                if (jugadorRival.cantarFlor() == 'Flor') {
+                    Swal.fire({
+                        title: "Flor!",
+                        icon: "info"
+                    });
+                    this.esconderBotonFlorJugadorRival()
+                } else {
+                    Swal.fire("Usted no tiene Flor!!", "Pierde 3 puntos", "info");
+                    this.esconderBotonFlorJugadorRival()
+                    bot.sumarPuntos(3)
+                }
             }
         }).finally(() => {
+            this.esconderBotonEnvidoJugadorRival()
+            this.esconderBotonFlorJugadorRival()
             this.persistirEnLocalStorage()
-            this.controladorDeTurno
+            //this.controladorDeTurno()
         });
     }
 
     hostDiceFlor() {
+        this.esconderBotonEnvidoJugadorRival()
+        this.florCantadaPorElBot = true
         Swal.fire({
             title: "El host cantó Flor!",
             icon: "info"
         });
-
-        //this.controladorDeTurno()
         this.persistirEnLocalStorage()
     }
 

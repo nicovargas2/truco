@@ -25,7 +25,6 @@ class Jugador {
 
     jugarCarta(idDeCarta) {
         const cartasRestantes = this.cartasMano.filter(carta => carta.id != idDeCarta)
-        console.log(cartasRestantes)
         this.cartasMano = cartasRestantes
     }
 
