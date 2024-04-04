@@ -34,15 +34,12 @@ class Bot extends Jugador {
 
     juegue() {
         if (arbitro.ronda1Terminada == false) {
-            if ((this.cantarFlor() == 'Flor' && arbitro.florCantadaPorElBot == false) || (this.cantarTantos() >= this.limiteTantosEnvido && arbitro.envidoCantado == false)) {
-                if (this.cantarFlor() == 'Flor') {
-                    this.flor()
-                    this.deboMostrarMisCartasAlfinal = true
-                    this.jugarUnaCarta()
-                } else {
-
-                    this.jugarEnvido()
-                }
+            if (this.cantarFlor() == 'Flor' && arbitro.florCantadaPorElBot == false && conFlor) {
+                this.flor()
+                this.deboMostrarMisCartasAlfinal = true
+                this.jugarUnaCarta()
+            } else if (this.cantarTantos() >= this.limiteTantosEnvido && arbitro.envidoCantado == false && arbitro.florCantadaPorElBot == false) {
+                this.jugarEnvido()
             } else {
                 this.jugarUnaCarta()
             }
@@ -57,20 +54,79 @@ class Bot extends Jugador {
         }
     }
 
-    decidirEnvido() {
-        if (this.cantarTantos() >= this.limiteTantosEnvido) {
-            const tantosJugadorRival = jugadorRival.cantarTantos()
-            let mensaje = bot.nombre + ' tiene: ' + (this.cantarTantos()).toString() + ', jugador ' + jugadorRival.nombre + ' tiene: ' + tantosJugadorRival
-            Swal.fire("Quiero!", mensaje, "success");
-            arbitro.resolverTantos(this.cantarTantos(), tantosJugadorRival)
+    decidirTruco() {
+        if (arbitro.ronda1Terminada && arbitro.ronda2Terminada && arbitro.ronda3Terminada == false) {
+            if (arbitro.ganadorRonda1 == 'host') {
+                if (this.cartasMano[0].jerarquia <= 3) {
+                    Toastify({
+                        text: "Quiero!",
+                        duration: 2000,
+                        style: {
+                            background: "linear-gradient(to right, #ed1f11, #c7308f)",
+                        },
+                    }).showToast();
+                } else {
+                    Toastify({
+                        text: "No quiero",
+                        duration: 2000,
+                        style: {
+                            background: "linear-gradient(to right, #ed1f11, #c7308f)",
+                        },
+                    }).showToast();
+                    if (this.deboMostrarMisCartasAlfinal) {
+                        this.jugarUnaCarta()
+                    }
+                }
+            }
         } else {
-            Swal.fire({
-                icon: "error",
-                title: "el Host dice: Envido no querido",
-                text: "1 punto para usted!"
+            let aceptarTruco = true
+            this.cartasMano.forEach(carta => {
+                if (carta.jerarquia > 3) {
+                    aceptarTruco = false
+                }
             });
+            if (aceptarTruco) {
+                Toastify({
+                    text: "Quiero!",
+                    duration: 2000,
+                    style: {
+                        background: "linear-gradient(to right, #ed1f11, #c7308f)",
+                    },
+                }).showToast();
+            } else {
+                Toastify({
+                    text: "No quiero",
+                    duration: 2000,
+                    style: {
+                        background: "linear-gradient(to right, #ed1f11, #c7308f)",
+                    },
+                }).showToast();
+                if (this.deboMostrarMisCartasAlfinal) {
+                    this.jugarUnaCarta()
+                }
+            }
         }
+    }
 
+    decidirEnvido() {
+        if (this.cantarFlor == 'Flor' && conFlor) {
+            this.flor()
+            this.deboMostrarMisCartasAlfinal = true
+        } else {
+            if (this.cantarTantos() >= this.limiteTantosEnvido) {
+                const tantosJugadorRival = jugadorRival.cantarTantos()
+                let mensaje = bot.nombre + ' tiene: ' + (this.cantarTantos()).toString() + ', jugador ' + jugadorRival.nombre + ' tiene: ' + tantosJugadorRival
+                Swal.fire("Quiero!", mensaje, "success");
+                arbitro.resolverTantos(this.cantarTantos(), tantosJugadorRival)
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "el Host dice: Envido no querido",
+                    text: "1 punto para usted!"
+                });
+                arbitro.envidoNoQuerido()
+            }
+        }
     }
 
     jugarUnaCarta() {

@@ -4,7 +4,7 @@ const jugadorRival = new Jugador('')
 const arbitro = new Arbitro()
 const nombreJugador = localStorage.getItem('nombreJugador')
 const puntos = localStorage.getItem('puntos')
-const conFlor = localStorage.getItem('conFlor')
+const conFlor = localStorage.getItem('conFlor') == 'true' ? true : false
 const tdAccionesJugador = document.getElementById('accionesJugador')
 
 
@@ -45,15 +45,14 @@ function mostrarBotonesPrimerRonda() {
         arbitro.envidoCantado = true
         arbitro.esconderBotonEnvidoJugadorRival()
         arbitro.esconderBotonFlorJugadorRival()
-        bot.decidirEnvido()
+        arbitro.cantaleEnvidoAlBot()
     })
 
     tdAccionesJugador.appendChild(buttonEnvido)
     const br = document.createElement('br')
     tdAccionesJugador.appendChild(br)
 
-
-    if (localStorage.getItem('conFlor')) {
+    if (conFlor) {
         const buttonFlor = document.createElement('button')
         buttonFlor.id = 'flor'
         buttonFlor.classList.add('rounded-md', 'bg-indigo-600', 'm-1', 'px-3', 'py-2', 'text-sm', 'font-semibold', 'text-white', 'hover:bg-indigo-500', 'focus-visible:outline', 'focus-visible:outline-2', 'focus-visible:outline-offset-2', 'focus-visible:outline-indigo-600')
@@ -64,6 +63,8 @@ function mostrarBotonesPrimerRonda() {
                     title: "Flor!",
                     icon: "info"
                 });
+                jugadorRival.sumarPuntos(3)
+                arbitro.reflejarTantos()
                 buttonFlor.removeEventListener('click', cantarFlorJugadorRivalButton)
             }
         })
@@ -179,11 +180,6 @@ function mostrarCartas() {
 }
 
 
-/* esto es para probar el while
-bot.puntos = 10
-jugadorRival.puntos = 35
-*/
-
 
 function comenzarElJuego() {
     armarTablero()
@@ -198,3 +194,13 @@ if (nombreJugador) {
 } else {
     window.location.assign("../index.html")
 }
+
+/*
+pendiente: 
+calcular el ganador de cada ronda
+calcular los puntos ganados
+cantar truco boton jugador rival
+decidirTruco en el bot{
+    si ganador mano 1 != ganador mano 2 and jerarquia<3 quiero el truco, sino no
+}
+*/
