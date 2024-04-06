@@ -20,8 +20,14 @@ class Arbitro {
         this.cartasJugadasBot.push(carta)
     }
 
-    agregarCartaJugadaJugadorRival(carta) {
-        this.cartasJugadasJugadorRival.push(carta)
+    agregarCartaJugadaJugadorRival(idCarta) {
+        let resultado = ''
+        jugadorRival.cartasMano.forEach((element) => {
+            if (element.id == idCarta) {
+                resultado = element
+            }
+        });
+        this.cartasJugadasJugadorRival.push(resultado)
     }
 
     esconderBotonFlorJugadorRival() {
@@ -128,30 +134,49 @@ class Arbitro {
         }
 
         const mazo = new Mazo()
-        //mazo.mezclar()
+        mazo.mezclar()
         bot.nuevaMano(mazo.repartirUnaCarta(), mazo.repartirUnaCarta(), mazo.repartirUnaCarta())
-        bot.cartasMano[0].locacion = "../img/back.jpg"
-        bot.cartasMano[1].locacion = "../img/back.jpg"
-        bot.cartasMano[2].locacion = "../img/back.jpg"
         jugadorRival.nuevaMano(mazo.repartirUnaCarta(), mazo.repartirUnaCarta(), mazo.repartirUnaCarta())
-        //bot.mostrarDatos()
-        //jugadorRival.mostrarDatos()
-
         this.persistirEnLocalStorage()
     }
 
     controladorDeRondas() {
         if (bot.cartasMano.length == 2 && jugadorRival.cartasMano.length == 2) {
             this.ronda1Terminada = true
+
+            if (this.cartasJugadasBot[0].jerarquia < this.cartasJugadasJugadorRival[0].jerarquia) {
+                this.ganadorRonda1 = 'host'
+            } else if (this.cartasJugadasBot[0].jerarquia > this.cartasJugadasJugadorRival[0].jerarquia) {
+                this.ganadorRonda1 = 'rival'
+            } else {
+                this.ganadorRonda1 = 'empate'
+            }
+
             this.esconderBotonEnvidoJugadorRival()
             this.esconderBotonFlorJugadorRival()
             this.mostrarBotonTrucoJugadorRival()
         }
+
         if (bot.cartasMano.length == 1 && jugadorRival.cartasMano.length == 1) {
             this.ronda2Terminada = true
+            if (this.cartasJugadasBot[1].jerarquia < this.cartasJugadasJugadorRival[1].jerarquia) {
+                this.ganadorRonda2 = 'host'
+            } else if (this.cartasJugadasBot[1].jerarquia > this.cartasJugadasJugadorRival[1].jerarquia) {
+                this.ganadorRonda2 = 'rival'
+            } else {
+                this.ganadorRonda2 = 'empate'
+            }
         }
+
         if (bot.cartasMano.length == 0 && jugadorRival.cartasMano.length == 0) {
             this.ronda3Terminada = true
+            if (this.cartasJugadasBot[2].jerarquia < this.cartasJugadasJugadorRival[2].jerarquia) {
+                this.ganadorRonda3 = 'host'
+            } else if (this.cartasJugadasBot[2].jerarquia > this.cartasJugadasJugadorRival[2].jerarquia) {
+                this.ganadorRonda3 = 'rival'
+            } else {
+                this.ganadorRonda3 = 'empate'
+            }
         }
 
         if (this.ronda1Terminada && this.ronda2Terminada && this.ronda3Terminada) {
@@ -192,10 +217,14 @@ class Arbitro {
                 },
             }).showToast();
         }, 1000);
+
+        if (this.trucoCantado == false) {
+            this.calculoTantosPartida()
+        }
     }
 
-    recalculoTantos() {
-        window.location.assign("./index.html")
+    calculoTantosPartida() {
+        //console.log('calcular punto ganador')
     }
 
     cantaleEnvidoAlBot() {
@@ -209,6 +238,7 @@ class Arbitro {
     }
 
     cantaleTrucoAlBot() {
+        this.trucoCantado = true
         bot.decidirTruco()
     }
 
@@ -224,12 +254,13 @@ class Arbitro {
         localStorage.setItem('arbitro', jsonArbitro)
     }
 
-    hostDiceEnvido(tantosBot) {
+    hostDiceEnvido() {
         this.envidoCantado = true
 
         if (conFlor) {
             Swal.fire({
                 title: "El host cantó envido",
+                allowOutsideClick: false,
                 showDenyButton: true,
                 confirmButtonText: "Quiero!",
                 denyButtonText: `No quiero.`,
@@ -238,20 +269,21 @@ class Arbitro {
                 icon: "question"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    let tantosJugadorRival = jugadorRival.cantarTantos()
-                    let mensaje = bot.nombre + ' tiene: ' + (tantosBot).toString() + ', jugador ' + jugadorRival.nombre + ' tiene: ' + tantosJugadorRival
+                    let mensaje = bot.nombre + ' tiene: ' + bot.tantos.toString() + ', jugador ' + jugadorRival.nombre + ' tiene: ' + jugadorRival.tantos
                     Swal.fire("Ok!", mensaje, "success");
-                    this.resolverTantos(tantosBot, tantosJugadorRival)
+                    this.resolverTantos(bot.tantos, jugadorRival.tantos)
                 } else if (result.isDenied) {
                     Swal.fire("No querido", "1 punto para el Host", "info");
                     bot.sumarPuntos(1)
                     this.reflejarTantos()
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    if (jugadorRival.cantarFlor() == 'Flor') {
+                    if (jugadorRival.tengoFlor()) {
                         Swal.fire({
                             title: "Flor!",
                             icon: "info"
                         });
+                        jugadorRival.sumarPuntos(3)
+                        this.reflejarTantos()
                         this.esconderBotonFlorJugadorRival()
                     } else {
                         Swal.fire("Usted no tiene Flor!!", "Pierde 3 puntos", "info");
@@ -276,10 +308,9 @@ class Arbitro {
                 icon: "question"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    let tantosJugadorRival = jugadorRival.cantarTantos()
-                    let mensaje = bot.nombre + ' tiene: ' + (tantosBot).toString() + ', jugador ' + jugadorRival.nombre + ' tiene: ' + tantosJugadorRival
+                    let mensaje = bot.nombre + ' tiene: ' + bot.tantos.toString() + ', jugador ' + jugadorRival.nombre + ' tiene: ' + jugadorRival.tantos
                     Swal.fire("Ok!", mensaje, "success");
-                    this.resolverTantos(tantosBot, tantosJugadorRival)
+                    this.resolverTantos(bot.tantos, jugadorRival.tantos)
                 } else {
                     Swal.fire("No querido", "1 punto para el Host", "info");
                     bot.sumarPuntos(1)
@@ -332,6 +363,7 @@ class Arbitro {
         const puntosJugadorRival = document.getElementById('puntosJugadorRival')
         puntosHost.innerHTML = bot.puntos
         puntosJugadorRival.innerHTML = jugadorRival.puntos
+
         if (bot.puntos >= this.AlTotalDePuntos) {
             Swal.fire({
                 icon: "error",

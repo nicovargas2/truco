@@ -2,23 +2,19 @@
 const bot = new Bot()
 const jugadorRival = new Jugador('')
 const arbitro = new Arbitro()
+
+//recupero info de localStorage
 const nombreJugador = localStorage.getItem('nombreJugador')
 const puntos = localStorage.getItem('puntos')
 const conFlor = localStorage.getItem('conFlor') == 'true' ? true : false
-const tdAccionesJugador = document.getElementById('accionesJugador')
-
 
 //Creo las partes del juego
+const tdAccionesJugador = document.getElementById('accionesJugador')
 const divInfoBot = document.getElementById('info-bot')
 const divMesa = document.getElementById('mesa')
 const divJugadorRivalCartas = document.getElementById('jugadorRivalCartas')
 
 
-function envido() {
-
-}
-
-//Armo el tablero
 function armarTablero() {
     const spanNombreJugadorRival = document.getElementById('spanNombreJugadorRival')
     jugadorRival.nombre = localStorage.getItem('nombreJugador')
@@ -58,13 +54,15 @@ function mostrarBotonesPrimerRonda() {
         buttonFlor.classList.add('rounded-md', 'bg-indigo-600', 'm-1', 'px-3', 'py-2', 'text-sm', 'font-semibold', 'text-white', 'hover:bg-indigo-500', 'focus-visible:outline', 'focus-visible:outline-2', 'focus-visible:outline-offset-2', 'focus-visible:outline-indigo-600')
         buttonFlor.innerHTML = 'Flor!'
         buttonFlor.addEventListener('click', function cantarFlorJugadorRivalButton() {
-            if (jugadorRival.cantarFlor() == 'Flor') {
+            if (jugadorRival.tengoFlor()) {
                 Swal.fire({
                     title: "Flor!",
                     icon: "info"
                 });
                 jugadorRival.sumarPuntos(3)
                 arbitro.reflejarTantos()
+                arbitro.esconderBotonEnvidoJugadorRival()
+                arbitro.esconderBotonFlorJugadorRival()
                 buttonFlor.removeEventListener('click', cantarFlorJugadorRivalButton)
             }
         })
@@ -78,6 +76,8 @@ function mostrarCartas() {
     //Esto es para saber las cartas de ambos jugadores
     bot.mostrarDatos()
     jugadorRival.mostrarDatos()
+    //A fines practicos de saber como se está comportando el bot lo dejo, pero una vez que estoy seguro lo comento.
+
     const divBotCarta1 = document.getElementById('botCarta1')
     const divBotCarta2 = document.getElementById('botCarta2')
     const divBotCarta3 = document.getElementById('botCarta3')
@@ -86,23 +86,20 @@ function mostrarCartas() {
     const imgBotCarta2 = document.createElement('img')
     const imgBotCarta3 = document.createElement('img')
 
-    imgBotCarta1.src = bot.carta1.locacion
+
     imgBotCarta1.src = "../img/back.jpg"
-    imgBotCarta1.alt = bot.carta1.mostrar()
+    imgBotCarta1.alt = bot.cartasMano[0].mostrar()
     imgBotCarta1.id = bot.cartasMano[0].id
     imgBotCarta2.src = "../img/back.jpg"
-    imgBotCarta2.alt = bot.carta2.mostrar()
+    imgBotCarta2.alt = bot.cartasMano[1].mostrar()
     imgBotCarta2.id = bot.cartasMano[1].id
     imgBotCarta3.src = "../img/back.jpg"
-    imgBotCarta3.alt = bot.carta3.mostrar()
+    imgBotCarta3.alt = bot.cartasMano[2].mostrar()
     imgBotCarta3.id = bot.cartasMano[2].id
 
     imgBotCarta1.classList.add('w-24')
-    //imgBotCarta1.classList.add('md:w-48')
     imgBotCarta2.classList.add('w-24')
-    //imgBotCarta2.classList.add('md:w-48')
     imgBotCarta3.classList.add('w-24')
-    //imgBotCarta3.classList.add('md:w-48')
 
     divBotCarta1.appendChild(imgBotCarta1)
     divBotCarta2.appendChild(imgBotCarta2)
@@ -117,22 +114,19 @@ function mostrarCartas() {
     const imgJugadorRivalCarta2 = document.createElement('img')
     const imgJugadorRivalCarta3 = document.createElement('img')
 
-    imgJugadorRivalCarta1.src = jugadorRival.carta1.locacion
-    imgJugadorRivalCarta1.alt = jugadorRival.carta1.mostrar()
+    imgJugadorRivalCarta1.src = jugadorRival.cartasMano[0].locacion
+    imgJugadorRivalCarta1.alt = jugadorRival.cartasMano[0].mostrar()
     imgJugadorRivalCarta1.id = jugadorRival.cartasMano[0].id
-    imgJugadorRivalCarta2.src = jugadorRival.carta2.locacion
-    imgJugadorRivalCarta2.alt = jugadorRival.carta2.mostrar()
+    imgJugadorRivalCarta2.src = jugadorRival.cartasMano[1].locacion
+    imgJugadorRivalCarta2.alt = jugadorRival.cartasMano[1].mostrar()
     imgJugadorRivalCarta2.id = jugadorRival.cartasMano[1].id
-    imgJugadorRivalCarta3.src = jugadorRival.carta3.locacion
-    imgJugadorRivalCarta3.alt = jugadorRival.carta3.mostrar()
+    imgJugadorRivalCarta3.src = jugadorRival.cartasMano[2].locacion
+    imgJugadorRivalCarta3.alt = jugadorRival.cartasMano[2].mostrar()
     imgJugadorRivalCarta3.id = jugadorRival.cartasMano[2].id
 
     imgJugadorRivalCarta1.classList.add('w-24')
-    //imgJugadorRivalCarta1.classList.add('md:w-48')
     imgJugadorRivalCarta2.classList.add('w-24')
-    //imgJugadorRivalCarta2.classList.add('md:w-48')
     imgJugadorRivalCarta3.classList.add('w-24')
-    //imgJugadorRivalCarta3.classList.add('md:w-48')
 
 
     imgJugadorRivalCarta1.addEventListener('click', function clickCarta1() {
@@ -140,7 +134,7 @@ function mostrarCartas() {
             const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
             divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta1)
             imgJugadorRivalCarta1.removeEventListener('click', clickCarta1)
-            arbitro.agregarCartaJugadaJugadorRival(jugadorRival.carta1)
+            arbitro.agregarCartaJugadaJugadorRival(imgJugadorRivalCarta1.id)
             jugadorRival.jugarCarta(imgJugadorRivalCarta1.id)
             arbitro.controladorDeTurno()
             arbitro.controladorDeRondas()
@@ -152,7 +146,7 @@ function mostrarCartas() {
             const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
             divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta2)
             imgJugadorRivalCarta2.removeEventListener('click', clickCarta2)
-            arbitro.agregarCartaJugadaJugadorRival(jugadorRival.carta2)
+            arbitro.agregarCartaJugadaJugadorRival(imgJugadorRivalCarta2.id)
             jugadorRival.jugarCarta(imgJugadorRivalCarta2.id)
             arbitro.controladorDeTurno()
             arbitro.controladorDeRondas()
@@ -165,7 +159,7 @@ function mostrarCartas() {
             const divCartaJugadaJugadorRival1 = document.getElementById('cartaJugadaJugadorRival1')
             divCartaJugadaJugadorRival1.appendChild(imgJugadorRivalCarta3)
             imgJugadorRivalCarta3.removeEventListener('click', clickCarta3)
-            arbitro.agregarCartaJugadaJugadorRival(jugadorRival.carta3)
+            arbitro.agregarCartaJugadaJugadorRival(imgJugadorRivalCarta3.id)
             jugadorRival.jugarCarta(imgJugadorRivalCarta3.id)
             arbitro.controladorDeTurno()
             arbitro.controladorDeRondas()
@@ -197,8 +191,6 @@ if (nombreJugador) {
 
 /*
 pendiente: 
-calcular el ganador de cada ronda
-calcular los puntos ganados
 cantar truco boton jugador rival
 decidirTruco en el bot{
     si ganador mano 1 != ganador mano 2 and jerarquia<3 quiero el truco, sino no
