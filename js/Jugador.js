@@ -5,18 +5,17 @@ class Jugador {
         this.habilitadoAJugar = false
         this.esMano = false
         this.deboMostrarMisCartasAlfinal = false
+        this.tantos = 0
     }
 
     mostrarDatos() {
         console.log('Nombre jugador: ' + this.nombre + ' Puntos: ' + this.puntos)
-        console.log('Cartas: ' + this.carta1.mostrar() + ' ' + this.carta2.mostrar() + ' ' + this.carta3.mostrar())
+        console.log('Cartas: ' + this.cartasMano[0].mostrar() + ' ' + this.cartasMano[1].mostrar() + ' ' + this.cartasMano[2].mostrar())
     }
 
     nuevaMano(c1, c2, c3) {
-        this.carta1 = new Carta(c1.id, c1.valorNumero, c1.palo, c1.jerarquia, c1.locacion)
-        this.carta2 = new Carta(c2.id, c2.valorNumero, c2.palo, c2.jerarquia, c2.locacion)
-        this.carta3 = new Carta(c3.id, c3.valorNumero, c3.palo, c3.jerarquia, c3.locacion)
         this.cartasMano = [c1, c2, c3]
+        this.tantos = this.cantarTantos()
     }
 
     sumarPuntos(puntos) {
@@ -58,50 +57,52 @@ class Jugador {
         let opcion2 = 0
         let opcion3 = 0
 
-        if (this.carta1.palo == this.carta2.palo) {
+        if (this.cartasMano[0].palo == this.cartasMano[1].palo) {
             opcion1 = puntosBase
-            if (this.carta1.valorNumero < 10) {
-                opcion1 += this.carta1.valorNumero
+            if (this.cartasMano[0].valorNumero < 10) {
+                opcion1 += this.cartasMano[0].valorNumero
             }
 
-            if (this.carta2.valorNumero < 10) {
-                opcion1 += this.carta2.valorNumero
+            if (this.cartasMano[1].valorNumero < 10) {
+                opcion1 += this.cartasMano[1].valorNumero
             }
         }
 
-        if (this.carta1.palo == this.carta3.palo) {
+        if (this.cartasMano[0].palo == this.cartasMano[2].palo) {
             opcion2 = puntosBase
-            if (this.carta1.valorNumero < 10) {
-                opcion2 += this.carta1.valorNumero
+            if (this.cartasMano[0].valorNumero < 10) {
+                opcion2 += this.cartasMano[0].valorNumero
             }
 
-            if (this.carta3.valorNumero < 10) {
-                opcion2 += this.carta3.valorNumero
+            if (this.cartasMano[2].valorNumero < 10) {
+                opcion2 += this.cartasMano[2].valorNumero
             }
 
         }
 
-        if (this.carta3.palo == this.carta2.palo) {
+        if (this.cartasMano[2].palo == this.cartasMano[1].palo) {
             opcion3 = puntosBase
-            if (this.carta3.valorNumero < 10) {
-                opcion3 += this.carta3.valorNumero
+            if (this.cartasMano[2].valorNumero < 10) {
+                opcion3 += this.cartasMano[2].valorNumero
             }
 
-            if (this.carta2.valorNumero < 10) {
-                opcion3 += this.carta2.valorNumero
+            if (this.cartasMano[1].valorNumero < 10) {
+                opcion3 += this.cartasMano[1].valorNumero
             }
         }
 
         return Math.max(opcion1, opcion2, opcion3)
     }
 
-    cantarFlor() {
-        if (this.carta1.palo == this.carta2.palo & this.carta1.palo == this.carta3.palo) {
-            return "Flor"
+
+    tengoFlor() {
+        const palo = this.cartasMano[0].palo
+
+        function checkPalo(p) {
+            return p.palo == palo;
         }
-        else {
-            return "Las cartas no son todas del mismo palo"
-        }
+
+        return this.cartasMano.every(checkPalo);
     }
 
 }

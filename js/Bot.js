@@ -7,18 +7,12 @@ class Bot extends Jugador {
         const preguntarSiEsElTurnoDelBot = () => {
             return new Promise((resolve) => {
                 setInterval(() => {
-                    /* con este pedacito de codigo se verifica 
-                    cada vez que pregunta el bot si es su turno
-                    console.log('ya es mi turno?')
-                    console.log(arbitro.turnoDelBot)
-                    */
                     if (arbitro.turnoDelBot) {
                         resolve()
                     }
                 }, 1000);
             })
         }
-
 
         const preguntar = preguntarSiEsElTurnoDelBot()
         preguntar
@@ -33,16 +27,17 @@ class Bot extends Jugador {
     }
 
     juegue() {
-        if (arbitro.ronda1Terminada == false) {
-            if (this.cantarFlor() == 'Flor' && arbitro.florCantadaPorElBot == false && conFlor) {
+        if (this.cartasMano.length == 3) {
+            if (this.tengoFlor() && arbitro.florCantadaPorElBot == false && conFlor) {
                 this.flor()
                 this.deboMostrarMisCartasAlfinal = true
                 this.jugarUnaCarta()
-            } else if (this.cantarTantos() >= this.limiteTantosEnvido && arbitro.envidoCantado == false && arbitro.florCantadaPorElBot == false) {
+            } else if (this.tantos >= this.limiteTantosEnvido && arbitro.envidoCantado == false && arbitro.florCantadaPorElBot == false) {
                 this.jugarEnvido()
             } else {
                 this.jugarUnaCarta()
             }
+
         }
 
         if (arbitro.ronda2Terminada == false) {
@@ -109,15 +104,14 @@ class Bot extends Jugador {
     }
 
     decidirEnvido() {
-        if (this.cantarFlor == 'Flor' && conFlor) {
+        if (this.tengoFlor() && conFlor) {
             this.flor()
             this.deboMostrarMisCartasAlfinal = true
         } else {
-            if (this.cantarTantos() >= this.limiteTantosEnvido) {
-                const tantosJugadorRival = jugadorRival.cantarTantos()
-                let mensaje = bot.nombre + ' tiene: ' + (this.cantarTantos()).toString() + ', jugador ' + jugadorRival.nombre + ' tiene: ' + tantosJugadorRival
+            if (this.tantos >= this.limiteTantosEnvido) {
+                let mensaje = bot.nombre + ' tiene: ' + this.tantos + ', jugador ' + jugadorRival.nombre + ' tiene: ' + jugadorRival.tantos
                 Swal.fire("Quiero!", mensaje, "success");
-                arbitro.resolverTantos(this.cantarTantos(), tantosJugadorRival)
+                arbitro.resolverTantos(this.tantos, jugadorRival.tantos)
             } else {
                 Swal.fire({
                     icon: "error",
@@ -133,23 +127,66 @@ class Bot extends Jugador {
         arbitro.controladorDeRondas()
 
         if (this.juegaRonda1()) {
-            this.ponerLaCartaEnLaMesa(bot.carta1)
-            arbitro.agregarCartaJugadaBot(bot.carta1)
-            bot.jugarCarta(bot.cartasMano[0].id)
+            let posicionCarta = this.elegirUnaCarta()
+
+            this.ponerLaCartaEnLaMesa(bot.cartasMano[posicionCarta - 1])
+            arbitro.agregarCartaJugadaBot(bot.cartasMano[posicionCarta - 1])
+
+            bot.jugarCarta(bot.cartasMano[posicionCarta - 1].id)
             arbitro.controladorDeTurno()
         }
+
         if (this.juegaRonda2()) {
-            this.ponerLaCartaEnLaMesa(bot.carta2)
-            arbitro.agregarCartaJugadaBot(bot.carta2)
-            bot.jugarCarta(bot.cartasMano[0].id)
+            let posicionCarta = this.elegirUnaCarta()
+
+            this.ponerLaCartaEnLaMesa(bot.cartasMano[posicionCarta - 1])
+            arbitro.agregarCartaJugadaBot(bot.cartasMano[posicionCarta - 1])
+
+            bot.jugarCarta(bot.cartasMano[posicionCarta - 1].id)
             arbitro.controladorDeTurno()
         }
+
         if (this.juegaRonda3()) {
-            this.ponerLaCartaEnLaMesa(bot.carta3)
-            arbitro.agregarCartaJugadaBot(bot.carta3)
-            bot.jugarCarta(bot.cartasMano[0].id)
+            let posicionCarta = this.elegirUnaCarta()
+
+            this.ponerLaCartaEnLaMesa(bot.cartasMano[posicionCarta - 1])
+            arbitro.agregarCartaJugadaBot(bot.cartasMano[posicionCarta - 1])
+
+            bot.jugarCarta(bot.cartasMano[posicionCarta - 1].id)
             arbitro.controladorDeTurno()
         }
+
+        arbitro.controladorDeRondas()
+    }
+
+    elegirUnaCarta() {
+        let posicionCarta = 1
+        if (this.cartasMano.length == 3) {
+            if (this.cartasMano[1].jerarquia > this.cartasMano[0].jerarquia) {
+                posicionCarta = 2
+                if (this.cartasMano[2].jerarquia > this.cartasMano[1].jerarquia) {
+                    posicionCarta = 3
+                }
+            } else {
+                if (this.cartasMano[2].jerarquia > this.cartasMano[0].jerarquia) {
+                    posicionCarta = 3
+                }
+            }
+        }
+
+        if (this.cartasMano.length == 2) {
+            if (arbitro.ganadorRonda1 == 'host') {
+                if (this.cartasMano[1].jerarquia > this.cartasMano[0].jerarquia) {
+                    posicionCarta = 2
+                }
+            } else {
+                if (this.cartasMano[1].jerarquia < this.cartasMano[0].jerarquia) {
+                    posicionCarta = 2
+                }
+            }
+        }
+
+        return posicionCarta
     }
 
     ponerLaCartaEnLaMesa(carta) {
@@ -160,7 +197,6 @@ class Bot extends Jugador {
         imgBotCarta.alt = carta.mostrar()
         imgBotCarta.id = carta.id
         imgBotCarta.classList.add('w-24')
-        //imgBotCarta.classList.add('md:w-48')
 
         divCartaJugadaBot.appendChild(imgBotCarta)
 
@@ -172,7 +208,7 @@ class Bot extends Jugador {
     }
 
     jugarEnvido() {
-        arbitro.hostDiceEnvido(this.cantarTantos())
+        arbitro.hostDiceEnvido()
     }
 
     flor() {
