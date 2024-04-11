@@ -1,3 +1,19 @@
+const API_BASE = 'https://randomuser.me/api/'
+
+fetch(API_BASE, {
+    method: 'GET'
+})
+    .then((respuesta) => {
+        return respuesta.json()
+    })
+    .then((data) => {
+        const nombreHost = data.results[0].name.first
+        localStorage.setItem('nombreHost', nombreHost)
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+
 let jugadorRivalNombreIngresado = ''
 
 const longitudMinimaDeNombre = 2

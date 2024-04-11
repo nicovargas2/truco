@@ -1,6 +1,6 @@
 class Bot extends Jugador {
-    constructor() {
-        super('Host')
+    constructor(nombre) {
+        super(nombre)
 
         this.limiteTantosEnvido = 20
 
@@ -50,9 +50,10 @@ class Bot extends Jugador {
     }
 
     decidirTruco() {
-        if (arbitro.ronda1Terminada && arbitro.ronda2Terminada && arbitro.ronda3Terminada == false) {
+        if (arbitro.ronda1Terminada && arbitro.ronda2Terminada == false) {
+            //estamos en ronda 2
             if (arbitro.ganadorRonda1 == 'host') {
-                if (this.cartasMano[0].jerarquia <= 3) {
+                if (this.cartasMano[0].jerarquia <= 5 && this.cartasMano[1].jerarquia <= 5) {
                     Toastify({
                         text: "Quiero!",
                         duration: 2000,
@@ -73,22 +74,9 @@ class Bot extends Jugador {
                     }
                 }
             }
-        } else {
-            let aceptarTruco = true
-            this.cartasMano.forEach(carta => {
-                if (carta.jerarquia > 3) {
-                    aceptarTruco = false
-                }
-            });
-            if (aceptarTruco) {
-                Toastify({
-                    text: "Quiero!",
-                    duration: 2000,
-                    style: {
-                        background: "linear-gradient(to right, #ed1f11, #c7308f)",
-                    },
-                }).showToast();
-            } else {
+        } else if (arbitro.ronda1Terminada && arbitro.ronda2Terminada && arbitro.ronda3Terminada == false) {
+            //estamos en la ultima ronda
+            if (this.cartasMano.length == 0) {
                 Toastify({
                     text: "No quiero",
                     duration: 2000,
@@ -96,8 +84,27 @@ class Bot extends Jugador {
                         background: "linear-gradient(to right, #ed1f11, #c7308f)",
                     },
                 }).showToast();
-                if (this.deboMostrarMisCartasAlfinal) {
-                    this.jugarUnaCarta()
+            } else {
+                if (this.cartasMano[0].jerarquia <= 3) {
+                    Toastify({
+                        text: "Quiero!",
+                        duration: 2000,
+                        style: {
+                            background: "linear-gradient(to right, #ed1f11, #c7308f)",
+                        },
+                    }).showToast();
+                } else {
+                    Toastify({
+                        text: "No quiero",
+                        duration: 2000,
+                        style: {
+                            background: "linear-gradient(to right, #ed1f11, #c7308f)",
+                        },
+                    }).showToast();
+
+                    if (this.deboMostrarMisCartasAlfinal) {
+                        this.jugarUnaCarta()
+                    }
                 }
             }
         }

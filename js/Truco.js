@@ -1,5 +1,6 @@
 //Creo los jugadores
-const bot = new Bot()
+const nombreHostJuegoIniciado = localStorage.getItem('nombreHost')
+const bot = new Bot(nombreHostJuegoIniciado)
 const jugadorRival = new Jugador('')
 const arbitro = new Arbitro()
 
@@ -191,8 +192,17 @@ if (nombreJugador) {
 
 /*
 pendiente: 
-cantar truco boton jugador rival
-decidirTruco en el bot{
-    si ganador mano 1 != ganador mano 2 and jerarquia<3 quiero el truco, sino no
-}
+
+-cantar truco boton jugador rival
+    en ronda 2 si dice 'no quiero' tiene que terminar el juego
+    en ronda 3 arreglar el true ni bien canta, y decidir bien el bot
+    decidirTruco en el bot{
+        si ganador mano 1 != ganador mano 2 and jerarquia<3 quiero el truco, sino no
+    }
+
+/si cantó Flor
+    tiene que mostrar las cartas si NO quiere el truco
+
+-boton irse al mazo
+
 */
