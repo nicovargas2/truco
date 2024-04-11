@@ -72,6 +72,7 @@ class Arbitro {
             buttonTruco.innerHTML = 'Truco!'
             buttonTruco.addEventListener('click', () => {
                 arbitro.cantaleTrucoAlBot()
+                this.ocultarBotonTrucoJugadorRival()
             })
             buttonTruco.classList.add('rounded-md', 'bg-indigo-600', 'm-1', 'px-3', 'py-2', 'text-sm', 'font-semibold', 'text-white', 'hover:bg-indigo-500', 'focus-visible:outline', 'focus-visible:outline-2', 'focus-visible:outline-offset-2', 'focus-visible:outline-indigo-600')
             AccionesJugador.appendChild(buttonTruco)
@@ -146,8 +147,14 @@ class Arbitro {
 
             if (this.cartasJugadasBot[0].jerarquia < this.cartasJugadasJugadorRival[0].jerarquia) {
                 this.ganadorRonda1 = 'host'
+                this.turnoDelBot = true
+                bot.habilitadoAJugar = true
+                jugadorRival.habilitadoAJugar = false
             } else if (this.cartasJugadasBot[0].jerarquia > this.cartasJugadasJugadorRival[0].jerarquia) {
                 this.ganadorRonda1 = 'rival'
+                this.turnoDelBot = false
+                bot.habilitadoAJugar = false
+                jugadorRival.habilitadoAJugar = true
             } else {
                 this.ganadorRonda1 = 'empate'
             }
@@ -161,8 +168,14 @@ class Arbitro {
             this.ronda2Terminada = true
             if (this.cartasJugadasBot[1].jerarquia < this.cartasJugadasJugadorRival[1].jerarquia) {
                 this.ganadorRonda2 = 'host'
+                this.turnoDelBot = true
+                bot.habilitadoAJugar = true
+                jugadorRival.habilitadoAJugar = false
             } else if (this.cartasJugadasBot[1].jerarquia > this.cartasJugadasJugadorRival[1].jerarquia) {
                 this.ganadorRonda2 = 'rival'
+                this.turnoDelBot = false
+                bot.habilitadoAJugar = false
+                jugadorRival.habilitadoAJugar = true
             } else {
                 this.ganadorRonda2 = 'empate'
             }
@@ -202,6 +215,7 @@ class Arbitro {
 
             bot.juegue()
         }
+
         this.persistirEnLocalStorage()
     }
 
@@ -224,7 +238,56 @@ class Arbitro {
     }
 
     calculoTantosPartida() {
-        //console.log('calcular punto ganador')
+        let contadorRondaGanadaRival = 0
+        let contadorRondaGanadaHost = 0
+
+        if (this.ganadorRonda1 == 'rival') {
+            contadorRondaGanadaRival += 1
+        }
+        if (this.ganadorRonda2 == 'rival') {
+            contadorRondaGanadaRival += 1
+        }
+        if (this.ganadorRonda3 == 'rival') {
+            contadorRondaGanadaRival += 1
+        }
+
+        if (this.ganadorRonda1 == 'host') {
+            contadorRondaGanadaHost += 1
+        }
+        if (this.ganadorRonda2 == 'host') {
+            contadorRondaGanadaHost += 1
+        }
+        if (this.ganadorRonda3 == 'host') {
+            contadorRondaGanadaHost += 1
+        }
+
+        if (contadorRondaGanadaRival > contadorRondaGanadaHost) {
+            //1 punto para el Rival
+            Toastify({
+                text: "Ganaste 1 tanto",
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #ed1f11, #c7308f)",
+                },
+            }).showToast();
+            jugadorRival.sumarPuntos(1)
+            this.reflejarTantos()
+            this.persistirEnLocalStorage()
+
+        } else {
+            //1 punto para el host
+
+            Toastify({
+                text: "1 tanto para " + bot.nombre,
+                duration: 2000,
+                style: {
+                    background: "linear-gradient(to right, #ed1f11, #c7308f)",
+                },
+            }).showToast();
+            bot.sumarPuntos(1)
+            this.reflejarTantos()
+            this.persistirEnLocalStorage()
+        }
     }
 
     cantaleEnvidoAlBot() {
